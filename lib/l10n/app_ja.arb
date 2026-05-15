@@ -1,0 +1,19 @@
+{
+  "@@locale": "ja",
+  "appTitle": "Resume Flutter",
+  "@appTitle": {
+    "description": "Application title"
+  },
+  "homeHeading": "Flutter Web ポートフォリオ",
+  "@homeHeading": {
+    "description": "Home page heading"
+  },
+  "homeSummary": "職務経歴を Flutter native widget で構造化表示するための初期スキャフォールドです。",
+  "@homeSummary": {
+    "description": "Home page summary before design implementation"
+  },
+  "designPending": "Claude Design 仕様投入待ち",
+  "@designPending": {
+    "description": "Status label shown before the design HTML is available"
+  }
+}
