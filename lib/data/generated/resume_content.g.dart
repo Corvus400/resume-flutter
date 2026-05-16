@@ -163,7 +163,7 @@ const experiences = <Experience>[
     overview: <ResumeTextItem>[
       ResumeTextItem('会員数360万人超のEC定期便サービス「Oisix」のAndroid/iOSアプリ開発に従事。'),
       ResumeTextItem(
-        'Android版ストアは此方',
+        'Android版ストアはこちら',
         links: <ResumeLink>[
           ResumeLink(
             label: 'Android版ストア',
@@ -235,7 +235,7 @@ const experiences = <Experience>[
       TakumiSection(
         title: 'PRのレビューを半自動化する大規模なClaudeスキルの作成',
         body: ResumeTextItem(
-          'ベースブランチと対象ブランチとの差分をClaudeが検出し、テストプランを組み立てadbコマンドなどを使用してClaudeが自律的に動作確認を行う。一時的なログコードの挿入、スクリーンショット、画面の録画を行うことでエビデンスを収集し動作確認後に該当PRにレポートを投稿する。Claudeの推論に任せる箇所と、シェルによって冪等性を担保する箇所とを分け、スキル発動のたびに冪等性が担保されず結果や出力形式がバラバラになる問題を解決。テスト可能な箇所とテスト不能な箇所とをClaude自身がシェルを使用して判別可能となっており、テストが実施できない場合は改善Issueを投稿する機能も用意しスケール可能としている。現状はADBコマンド等に依存しているためAndroid専用だが、idbやsimctlなどのコマンドを使用することでiOS版も作成可能。',
+          'ベースブランチと対象ブランチとの差分をClaudeが検出し、テストプランを組み立てadbコマンドなどを使用してClaudeが自律的に動作確認を行う。一時的なログコードの挿入、スクリーンショット、画面の録画を行うことでエビデンスを収集し動作確認後に該当PRにレポートを投稿する。Claudeの推論に任せる箇所と、シェルによってべき等性を担保する箇所とを分け、スキル発動のたびにべき等性が担保されず結果や出力形式がバラバラになる問題を解決。テスト可能な箇所とテスト不能な箇所とをClaude自身がシェルを使用して判別可能となっており、テストが実施できない場合は改善Issueを投稿する機能も用意しスケール可能としている。現状はADBコマンド等に依存しているためAndroid専用だが、idbやsimctlなどのコマンドを使用することでiOS版も作成可能。',
         ),
       ),
       TakumiSection(
@@ -290,7 +290,7 @@ const experiences = <Experience>[
       TakumiSection(
         title: 'SwiftExportの導入検討検証',
         body: ResumeTextItem(
-          '技術調査からプロダクトへの導入可否の判定までを実施。現段階ではalpha版であり、suspend関数がサポートされていないなど基本的な機能が揃っていないことから導入は見送るという結論をレポートしチームへ貢献。',
+          '技術調査からプロダクトへの導入可否の判定までを実施。現段階ではalpha版であり、suspend関数がサポートされていないなど基本的な機能がそろっていないことから導入は見送るという結論をレポートしチームへ貢献。',
         ),
       ),
       TakumiSection(
@@ -342,7 +342,7 @@ const experiences = <Experience>[
       TakumiSection(
         title: 'ADR策定と命名規則の統一',
         body: ResumeTextItem(
-          'UseCaseの命名規則ADRを策定し、17件のUseCaseをADR準拠にリネームした。XXXServiceListener → OnXxxLoadedListener への命名統一を実施した。interface を fun interface に統一する方針をADRとして明文化した。ADRの作成 -> Claudeでスキル化 -> スキルでADRを参照するのでスキルさえ発動すればADRに準拠したコードが自動的に生成される という仕組みにすることでADRの形骸化を防止。',
+          'UseCaseの命名規則ADRを策定し、17件のUseCaseをADR準拠にリネームした。XXXServiceListener → OnXxxLoadedListener への命名統一を実施した。interface を fun interface に統一する方針をADRとして明文化した。ADRの作成 -> Claudeでスキル化 -> スキルでADRを参照するのでスキルさえ発動すればADRに準拠したコードが自動的に生成される という仕組みにすることでADRの形がい化を防止。',
         ),
       ),
     ],
@@ -383,7 +383,7 @@ const experiences = <Experience>[
     ],
     overview: <ResumeTextItem>[
       ResumeTextItem(
-        '乗客が使用するアプリのストアは此方',
+        '乗客が使用するアプリのストアはこちら',
         links: <ResumeLink>[
           ResumeLink(
             label: '乗客用アプリストア',
@@ -501,7 +501,7 @@ const experiences = <Experience>[
     ],
     overview: <ResumeTextItem>[
       ResumeTextItem(
-        'ストアは此方',
+        'ストアはこちら',
         links: <ResumeLink>[
           ResumeLink(
             label: 'ストア',
@@ -626,7 +626,7 @@ const experiences = <Experience>[
     ],
     overview: <ResumeTextItem>[
       ResumeTextItem(
-        'ストアは此方',
+        'ストアはこちら',
         links: <ResumeLink>[
           ResumeLink(
             label: 'ストア',
