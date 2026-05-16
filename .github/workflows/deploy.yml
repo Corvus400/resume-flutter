@@ -16,12 +16,19 @@ concurrency:
 
 env:
   REPO_NAME: ${{ github.event.repository.name }}
+  RESUME_SOURCE_README: ${{ github.workspace }}/resume-source/README.md
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          repository: Corvus400/resume
+          ref: master
+          path: resume-source
 
       - uses: actions/configure-pages@v5
         with:
