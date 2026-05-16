@@ -35,45 +35,62 @@ Future<void> _openExperienceList(WidgetTester tester) async {
 
 void main() {
   group('Mobile navigation contract', () {
-    testWidgets(
-      'top-level section links are visible without horizontal scroll',
-      (tester) async {
-        await _pumpMobileApp(tester);
+    testWidgets('phone portrait uses a right-edge icon navigation rail', (
+      tester,
+    ) async {
+      await _pumpMobileApp(tester);
 
-        for (final section in [
-          'home',
-          'experience',
-          'projects',
-          'activities',
-          'skills',
-        ]) {
-          final item = find.byKey(Key('mobile-nav-$section'));
-          expect(item, findsOneWidget);
+      for (final section in [
+        'home',
+        'experience',
+        'projects',
+        'activities',
+        'skills',
+      ]) {
+        final item = find.byKey(Key('phone-nav-$section'));
+        expect(item, findsOneWidget);
 
-          final rect = tester.getRect(item);
-          expect(rect.left, greaterThanOrEqualTo(0));
-          expect(rect.right, lessThanOrEqualTo(430));
-          expect(rect.bottom, lessThan(320));
-        }
-      },
-    );
+        final rect = tester.getRect(item);
+        expect(rect.left, greaterThanOrEqualTo(370));
+        expect(rect.right, lessThanOrEqualTo(430));
+      }
 
-    testWidgets('all top-level sections are reachable in portrait layout', (
+      expect(find.text('個人開発'), findsNothing);
+      expect(find.byKey(const Key('phone-nav-rail')), findsOneWidget);
+    });
+
+    testWidgets('phone portrait rail opens every top-level section', (
       tester,
     ) async {
       await _pumpMobileApp(tester);
 
       for (final entry in const [
-        ('個人開発', '04 — Personal Projects'),
-        ('その他活動', '05 — Outside Activities'),
-        ('スキル', '06 — Skills'),
+        ('projects', '04 — Personal Projects'),
+        ('activities', '05 — Outside Activities'),
+        ('skills', '06 — Skills'),
       ]) {
-        await tester.ensureVisible(find.text(entry.$1).first);
-        await tester.pumpAndSettle();
-        await tester.tap(find.text(entry.$1).first);
+        await tester.tap(find.byKey(Key('phone-nav-${entry.$1}')));
         await tester.pumpAndSettle();
 
         expect(find.text(entry.$2.toUpperCase()), findsOneWidget);
+      }
+    });
+
+    testWidgets('phone landscape and non-phone layouts do not show the rail', (
+      tester,
+    ) async {
+      for (final size in const [
+        Size(844, 390),
+        Size(600, 900),
+        Size(1280, 900),
+      ]) {
+        appRouter.go('/');
+        tester.view.physicalSize = size;
+        tester.view.devicePixelRatio = 1;
+        await tester.pumpWidget(const ResumeFlutterApp());
+        await tester.pumpAndSettle();
+
+        expect(find.byKey(const Key('phone-nav-rail')), findsNothing);
       }
     });
   });
@@ -112,6 +129,24 @@ void main() {
   });
 
   group('Experience list design and interaction contract', () {
+    testWidgets('phone title stays on one line and clear of the count label', (
+      tester,
+    ) async {
+      await _pumpMobileApp(tester);
+      await tester.tap(find.byKey(const Key('phone-nav-experience')));
+      await tester.pumpAndSettle();
+
+      final title = find.byKey(const Key('section-header-title'));
+      final count = find.text('最新 4 件 / 全 24 件');
+      expect(title, findsOneWidget);
+      expect(count, findsOneWidget);
+
+      final titleRect = tester.getRect(title);
+      final countRect = tester.getRect(count);
+      expect(titleRect.height, lessThanOrEqualTo(56));
+      expect(titleRect.right, lessThanOrEqualTo(countRect.left - 8));
+    });
+
     testWidgets('uses the full resume count as denominator', (tester) async {
       await _pumpDesktopApp(tester);
       await _openExperienceList(tester);
@@ -277,6 +312,49 @@ void main() {
           .getTopLeft(find.text('FLUTTER WEB · HASH ROUTING'))
           .dy;
       expect(footerTop, lessThan(1800));
+    });
+  });
+
+  group('Personal projects responsive contract', () {
+    testWidgets('phone project cards are content-sized instead of stretched', (
+      tester,
+    ) async {
+      await _pumpMobileApp(tester);
+      await tester.tap(find.byKey(const Key('phone-nav-projects')));
+      await tester.pumpAndSettle();
+
+      final firstCard = find.byKey(const Key('project-card-0'));
+      final footer = find.byKey(const Key('project-card-footer-0'));
+      expect(firstCard, findsOneWidget);
+      expect(footer, findsOneWidget);
+
+      final cardRect = tester.getRect(firstCard);
+      final footerRect = tester.getRect(footer);
+      expect(cardRect.height, lessThan(560));
+      expect(footerRect.bottom, lessThanOrEqualTo(cardRect.bottom));
+    });
+
+    testWidgets('tablet and desktop project cards keep the grid contract', (
+      tester,
+    ) async {
+      for (final size in const [Size(768, 1024), Size(1280, 900)]) {
+        appRouter.go('/');
+        tester.view.physicalSize = size;
+        tester.view.devicePixelRatio = 1;
+        await tester.pumpWidget(const ResumeFlutterApp());
+        await tester.pumpAndSettle();
+
+        if (size.width < 600) {
+          await tester.tap(find.byKey(const Key('phone-nav-projects')));
+        } else {
+          await tester.tap(find.text('個人開発').first);
+        }
+        await tester.pumpAndSettle();
+
+        expect(find.byKey(const Key('phone-nav-rail')), findsNothing);
+        expect(find.byKey(const Key('project-grid')), findsOneWidget);
+        expect(find.byKey(const Key('project-card-0')), findsOneWidget);
+      }
     });
   });
 }

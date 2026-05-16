@@ -22,17 +22,20 @@ class _ExperienceListViewState extends State<ExperienceListView> {
   @override
   Widget build(BuildContext context) {
     final visibleExperiences = viewModel.filteredExperiences(_selectedFilter);
+    final isMobile = MediaQuery.sizeOf(context).width < resumeBreakpoint;
     return ResumeShell(
       activeSection: ResumeSection.experience,
       mobileTitle: '職務経歴',
       child: PageStage(
         key: const Key('experience-list-stage'),
-        padding: EdgeInsets.fromLTRB(
-          AppSpacing.s12,
-          AppSpacing.s16,
-          AppSpacing.s12,
-          AppSpacing.s24,
-        ),
+        padding: isMobile
+            ? const EdgeInsets.all(AppSpacing.s5)
+            : const EdgeInsets.fromLTRB(
+                AppSpacing.s12,
+                AppSpacing.s16,
+                AppSpacing.s12,
+                AppSpacing.s24,
+              ),
         children: [
           SectionHeader(
             eyebrow: '02 — Work Experience',
@@ -72,24 +75,43 @@ class _ExperienceListViewState extends State<ExperienceListView> {
             ),
             child: ExternalTextLink(
               url: viewModel.resumeUrl,
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '全24件の職務経歴を見る',
-                    style: TextStyle(fontWeight: FontWeight.w700),
-                  ),
-                  SizedBox(width: AppSpacing.s2),
-                  Text(
-                    'resume repository ↗',
-                    style: TextStyle(
-                      color: AppColors.ink500,
-                      fontSize: 12,
-                      letterSpacing: 0.5,
+              child: isMobile
+                  ? const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '全24件の職務経歴を見る',
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ),
+                        SizedBox(height: AppSpacing.s1),
+                        Text(
+                          'resume repository ↗',
+                          style: TextStyle(
+                            color: AppColors.ink500,
+                            fontSize: 12,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ],
+                    )
+                  : const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '全24件の職務経歴を見る',
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ),
+                        SizedBox(width: AppSpacing.s2),
+                        Text(
+                          'resume repository ↗',
+                          style: TextStyle(
+                            color: AppColors.ink500,
+                            fontSize: 12,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
             ),
           ),
         ],

@@ -29,9 +29,29 @@ class PersonalProjectsView extends StatelessWidget {
           const SizedBox(height: AppSpacing.s8),
           LayoutBuilder(
             builder: (context, constraints) {
+              final isPhone =
+                  MediaQuery.sizeOf(context).width < resumeBreakpoint;
+              if (isPhone) {
+                return Column(
+                  children: [
+                    for (final indexed in viewModel.projects.indexed) ...[
+                      _ProjectCard(
+                        key: Key('project-card-${indexed.$1}'),
+                        project: indexed.$2,
+                        index: indexed.$1,
+                        compact: true,
+                      ),
+                      if (indexed.$1 != viewModel.projects.length - 1)
+                        const SizedBox(height: AppSpacing.s6),
+                    ],
+                  ],
+                );
+              }
+
               final columns = constraints.maxWidth < 760 ? 1 : 2;
-              final cardHeight = columns == 1 ? 660.0 : 460.0;
+              final cardHeight = columns == 1 ? 660.0 : 560.0;
               return GridView.count(
+                key: const Key('project-grid'),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 crossAxisCount: columns,
@@ -41,8 +61,12 @@ class PersonalProjectsView extends StatelessWidget {
                     (constraints.maxWidth / columns - AppSpacing.s3) /
                     cardHeight,
                 children: [
-                  for (final project in viewModel.projects)
-                    _ProjectCard(project: project),
+                  for (final indexed in viewModel.projects.indexed)
+                    _ProjectCard(
+                      key: Key('project-card-${indexed.$1}'),
+                      project: indexed.$2,
+                      index: indexed.$1,
+                    ),
                 ],
               );
             },
@@ -54,9 +78,16 @@ class PersonalProjectsView extends StatelessWidget {
 }
 
 class _ProjectCard extends StatefulWidget {
-  const _ProjectCard({required this.project});
+  const _ProjectCard({
+    super.key,
+    required this.project,
+    required this.index,
+    this.compact = false,
+  });
 
   final PersonalProject project;
+  final int index;
+  final bool compact;
 
   @override
   State<_ProjectCard> createState() => _ProjectCardState();
@@ -68,6 +99,7 @@ class _ProjectCardState extends State<_ProjectCard> {
   @override
   Widget build(BuildContext context) {
     final project = widget.project;
+    final compact = widget.compact;
     return InkWell(
       onTap: () => launchExternalUrl(context, project.repoUrl),
       onHover: (hovered) => setState(() => _hovered = hovered),
@@ -96,7 +128,7 @@ class _ProjectCardState extends State<_ProjectCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 180,
+                height: compact ? 112 : 180,
                 width: double.infinity,
                 child: project.imageAssetPath == null
                     ? const ColoredBox(
@@ -108,7 +140,9 @@ class _ProjectCardState extends State<_ProjectCard> {
                     : Image.asset(project.imageAssetPath!, fit: BoxFit.cover),
               ),
               Padding(
-                padding: const EdgeInsets.all(AppSpacing.s6),
+                padding: EdgeInsets.all(
+                  compact ? AppSpacing.s4 : AppSpacing.s6,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -119,7 +153,9 @@ class _ProjectCardState extends State<_ProjectCard> {
                         Expanded(
                           child: Text(
                             project.name,
-                            style: Theme.of(context).textTheme.titleLarge,
+                            style: compact
+                                ? Theme.of(context).textTheme.titleMedium
+                                : Theme.of(context).textTheme.titleLarge,
                           ),
                         ),
                         TagChip(
@@ -144,10 +180,11 @@ class _ProjectCardState extends State<_ProjectCard> {
                   ],
                 ),
               ),
-              const Spacer(),
+              if (!compact) const Spacer(),
               Container(
+                key: Key('project-card-footer-${widget.index}'),
                 padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.s6,
+                  horizontal: AppSpacing.s5,
                   vertical: AppSpacing.s4,
                 ),
                 decoration: const BoxDecoration(

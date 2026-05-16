@@ -73,6 +73,17 @@ class SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.sizeOf(context).width < 600;
+    final titleText = Text(
+      title,
+      key: const Key('section-header-title'),
+      maxLines: isMobile ? 1 : null,
+      overflow: isMobile ? TextOverflow.visible : null,
+      style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+        fontSize: isMobile ? 32 : null,
+        height: isMobile ? 1.16 : null,
+      ),
+    );
     return Container(
       padding: const EdgeInsets.only(bottom: AppSpacing.s6),
       decoration: const BoxDecoration(
@@ -87,11 +98,14 @@ class SectionHeader extends StatelessWidget {
               children: [
                 Eyebrow(eyebrow),
                 const SizedBox(height: AppSpacing.s3),
-                Text(title, style: Theme.of(context).textTheme.headlineLarge),
+                titleText,
               ],
             ),
           ),
-          ?trailing,
+          if (trailing != null) ...[
+            SizedBox(width: isMobile ? AppSpacing.s2 : AppSpacing.s4),
+            Flexible(flex: 0, child: trailing!),
+          ],
         ],
       ),
     );

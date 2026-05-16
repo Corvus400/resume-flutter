@@ -6,18 +6,20 @@ import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 
 const resumeBreakpoint = 600.0;
+const _phoneRailWidth = 52.0;
 
 enum ResumeSection {
-  home('/', 'トップ'),
-  experience('/experience', '職務経歴'),
-  projects('/projects', '個人開発'),
-  activities('/activities', 'その他活動'),
-  skills('/skills', 'スキル');
+  home('/', 'トップ', Icons.home_outlined),
+  experience('/experience', '職務経歴', Icons.work_outline),
+  projects('/projects', '個人開発', Icons.code),
+  activities('/activities', 'その他活動', Icons.campaign_outlined),
+  skills('/skills', 'スキル', Icons.bar_chart_rounded);
 
-  const ResumeSection(this.path, this.label);
+  const ResumeSection(this.path, this.label, this.icon);
 
   final String path;
   final String label;
+  final IconData icon;
 }
 
 class ResumeShell extends StatelessWidget {
@@ -36,35 +38,54 @@ class ResumeShell extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
+        final isPhonePortrait =
+            constraints.maxWidth < resumeBreakpoint &&
+            constraints.maxWidth < constraints.maxHeight;
         final isMobile = constraints.maxWidth < resumeBreakpoint;
         return Scaffold(
-          body: SingleChildScrollView(
-            child: Center(
-              child: Container(
-                constraints: BoxConstraints(maxWidth: isMobile ? 420 : 1200),
-                margin: EdgeInsets.all(
-                  isMobile ? AppSpacing.s4 : AppSpacing.s6,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.bg,
-                  border: Border.all(color: AppColors.line),
-                  borderRadius: BorderRadius.circular(isMobile ? 10 : 12),
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _AppBar(
-                      activeSection: activeSection,
-                      isMobile: isMobile,
-                      mobileTitle: mobileTitle,
+          body: Stack(
+            children: [
+              Positioned.fill(
+                right: isPhonePortrait ? _phoneRailWidth : 0,
+                child: SingleChildScrollView(
+                  child: Center(
+                    child: Container(
+                      constraints: BoxConstraints(
+                        maxWidth: isMobile ? 420 : 1200,
+                      ),
+                      margin: EdgeInsets.all(
+                        isMobile ? AppSpacing.s4 : AppSpacing.s6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.bg,
+                        border: Border.all(color: AppColors.line),
+                        borderRadius: BorderRadius.circular(isMobile ? 10 : 12),
+                      ),
+                      clipBehavior: Clip.antiAlias,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _AppBar(
+                            activeSection: activeSection,
+                            isMobile: isMobile,
+                            mobileTitle: mobileTitle,
+                          ),
+                          child,
+                          const _Footer(),
+                        ],
+                      ),
                     ),
-                    child,
-                    const _Footer(),
-                  ],
+                  ),
                 ),
               ),
-            ),
+              if (isPhonePortrait)
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: _PhoneNavigationRail(activeSection: activeSection),
+                ),
+            ],
           ),
         );
       },
@@ -130,70 +151,77 @@ class _AppBar extends StatelessWidget {
               ),
             ),
           ),
-          if (isMobile) _MobileSectionNav(activeSection: activeSection),
         ],
       ),
     );
   }
 }
 
-class _MobileSectionNav extends StatelessWidget {
-  const _MobileSectionNav({required this.activeSection});
+class _PhoneNavigationRail extends StatelessWidget {
+  const _PhoneNavigationRail({required this.activeSection});
 
   final ResumeSection activeSection;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.s5,
-        AppSpacing.s2,
-        AppSpacing.s5,
-        AppSpacing.s4,
-      ),
-      child: Wrap(
-        spacing: 8,
-        runSpacing: 8,
-        children: [
-          for (final section in ResumeSection.values)
-            _MobileNavItem(section: section, active: section == activeSection),
-        ],
+    return SizedBox(
+      key: const Key('phone-nav-rail'),
+      width: _phoneRailWidth,
+      child: DecoratedBox(
+        decoration: const BoxDecoration(
+          color: AppColors.surface,
+          border: Border(left: BorderSide(color: AppColors.line)),
+        ),
+        child: SafeArea(
+          left: false,
+          child: Column(
+            children: [
+              const SizedBox(height: AppSpacing.s4),
+              for (final section in ResumeSection.values)
+                _PhoneNavItem(
+                  section: section,
+                  active: section == activeSection,
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }
 }
 
-class _MobileNavItem extends StatelessWidget {
-  const _MobileNavItem({required this.section, required this.active});
+class _PhoneNavItem extends StatelessWidget {
+  const _PhoneNavItem({required this.section, required this.active});
 
   final ResumeSection section;
   final bool active;
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.center,
-      child: InkWell(
-        key: Key('mobile-nav-${section.name}'),
-        borderRadius: BorderRadius.circular(999),
-        onTap: () => context.go(section.path),
-        child: Container(
-          height: 34,
-          padding: const EdgeInsets.symmetric(horizontal: 14),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: active ? AppColors.primary : AppColors.surface,
-            border: Border.all(
-              color: active ? AppColors.primary : AppColors.line,
-            ),
-            borderRadius: BorderRadius.circular(999),
-          ),
-          child: Text(
-            section.label,
-            style: TextStyle(
-              color: active ? AppColors.onPrimary : AppColors.ink700,
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
+    return Tooltip(
+      message: section.label,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6),
+        child: Semantics(
+          label: section.label,
+          button: true,
+          selected: active,
+          child: Material(
+            key: Key('phone-nav-${section.name}'),
+            color: active ? AppColors.primaryContainer : Colors.transparent,
+            shape: const StadiumBorder(),
+            child: InkWell(
+              customBorder: const StadiumBorder(),
+              onTap: () => context.go(section.path),
+              child: SizedBox(
+                width: 44,
+                height: 38,
+                child: Icon(
+                  section.icon,
+                  size: 23,
+                  color: active ? AppColors.primary : AppColors.ink500,
+                ),
+              ),
             ),
           ),
         ),

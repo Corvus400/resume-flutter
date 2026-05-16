@@ -105,35 +105,44 @@ class _SkillRow extends StatelessWidget {
     final ratio = (entry.experienceMonths / maxMonths).clamp(0.0, 1.0);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.s2),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 190,
-            child: Text(
-              entry.name,
-              style: const TextStyle(fontWeight: FontWeight.w600),
-            ),
-          ),
-          Expanded(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(99),
-              child: LinearProgressIndicator(
-                value: ratio,
-                minHeight: 7,
-                backgroundColor: AppColors.surfaceAlt,
-                valueColor: const AlwaysStoppedAnimation(AppColors.primary),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isNarrow = constraints.maxWidth < 360;
+          return Row(
+            children: [
+              SizedBox(
+                width: isNarrow ? 116 : 190,
+                child: Text(
+                  entry.name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
               ),
-            ),
-          ),
-          const SizedBox(width: AppSpacing.s5),
-          SizedBox(
-            width: 100,
-            child: Text(
-              entry.experienceLabel,
-              style: const TextStyle(color: AppColors.ink500),
-            ),
-          ),
-        ],
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(99),
+                  child: LinearProgressIndicator(
+                    value: ratio,
+                    minHeight: 7,
+                    backgroundColor: AppColors.surfaceAlt,
+                    valueColor: const AlwaysStoppedAnimation(AppColors.primary),
+                  ),
+                ),
+              ),
+              SizedBox(width: isNarrow ? AppSpacing.s3 : AppSpacing.s5),
+              SizedBox(
+                width: isNarrow ? 72 : 100,
+                child: Text(
+                  entry.experienceLabel,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(color: AppColors.ink500),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

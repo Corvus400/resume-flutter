@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:resume_flutter/app.dart';
+import 'package:resume_flutter/router.dart';
 
 var _fontsLoaded = false;
 
@@ -17,7 +18,20 @@ Future<void> _loadFonts() async {
 
 Future<void> _pumpDesktopApp(WidgetTester tester) async {
   await _loadFonts();
+  appRouter.go('/');
   tester.view.physicalSize = const Size(1280, 900);
+  tester.view.devicePixelRatio = 1;
+  addTearDown(tester.view.resetPhysicalSize);
+  addTearDown(tester.view.resetDevicePixelRatio);
+
+  await tester.pumpWidget(const ResumeFlutterApp());
+  await tester.pumpAndSettle();
+}
+
+Future<void> _pumpPhoneApp(WidgetTester tester) async {
+  await _loadFonts();
+  appRouter.go('/');
+  tester.view.physicalSize = const Size(430, 932);
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.resetPhysicalSize);
   addTearDown(tester.view.resetDevicePixelRatio);
@@ -34,6 +48,31 @@ Future<void> _expectScaffoldGolden(
 }
 
 void main() {
+  testWidgets('phone hero navigation rail visual contract', (tester) async {
+    await _pumpPhoneApp(tester);
+
+    await _expectScaffoldGolden(
+      tester,
+      'goldens/phone_home_navigation_rail.png',
+    );
+  }, tags: ['golden']);
+
+  testWidgets('phone experience list visual contract', (tester) async {
+    await _pumpPhoneApp(tester);
+    await tester.tap(find.byKey(const Key('phone-nav-experience')));
+    await tester.pumpAndSettle();
+
+    await _expectScaffoldGolden(tester, 'goldens/phone_experience_list.png');
+  }, tags: ['golden']);
+
+  testWidgets('phone projects visual contract', (tester) async {
+    await _pumpPhoneApp(tester);
+    await tester.tap(find.byKey(const Key('phone-nav-projects')));
+    await tester.pumpAndSettle();
+
+    await _expectScaffoldGolden(tester, 'goldens/phone_projects.png');
+  }, tags: ['golden']);
+
   testWidgets('desktop hero visual contract', (tester) async {
     await _pumpDesktopApp(tester);
 
@@ -67,5 +106,13 @@ void main() {
     await tester.pumpAndSettle();
 
     await _expectScaffoldGolden(tester, 'goldens/desktop_skills.png');
+  }, tags: ['golden']);
+
+  testWidgets('desktop projects visual contract', (tester) async {
+    await _pumpDesktopApp(tester);
+    await tester.tap(find.text('個人開発').first);
+    await tester.pumpAndSettle();
+
+    await _expectScaffoldGolden(tester, 'goldens/desktop_projects.png');
   }, tags: ['golden']);
 }
