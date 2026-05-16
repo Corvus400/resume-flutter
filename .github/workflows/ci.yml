@@ -1,0 +1,121 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  REPO_NAME: ${{ github.event.repository.name }}
+  FLUTTER_VERSION: 3.41.5
+  RESUME_SOURCE_README: ${{ github.workspace }}/resume-source/README.md
+
+jobs:
+  classify-ci-trust:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    outputs:
+      trusted: ${{ steps.classify.outputs.trusted }}
+
+    steps:
+      - id: classify
+        name: Classify pull request trust
+        shell: bash
+        env:
+          ACTOR: ${{ github.event.pull_request.user.login }}
+          HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          trusted="false"
+          case "$ACTOR" in
+            Corvus400|dependabot\[bot\]|renovate\[bot\])
+              if [ "$HEAD_REPOSITORY" = "$REPOSITORY" ]; then
+                trusted="true"
+              fi
+              ;;
+          esac
+
+          echo "trusted=$trusted" >> "$GITHUB_OUTPUT"
+          echo "trusted=$trusted"
+
+  build-and-test:
+    needs: [classify-ci-trust]
+    if: needs.classify-ci-trust.outputs.trusted == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout pull-request branch
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Checkout resume source
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          repository: Corvus400/resume
+          ref: master
+          path: resume-source
+
+      - name: Install Flutter
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch "$FLUTTER_VERSION" https://github.com/flutter/flutter.git "$RUNNER_TEMP/flutter"
+          echo "$RUNNER_TEMP/flutter/bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/flutter/bin/flutter" --version
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Verify generated resume content
+        run: dart run tool/generate_resume_content.dart --check
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Test
+        run: flutter test --exclude-tags golden
+
+      - name: Build
+        run: |
+          set -euo pipefail
+          flutter build web --wasm --release --base-href "/${REPO_NAME}/"
+          touch build/web/.nojekyll
+
+  ci-gate:
+    needs: [classify-ci-trust, build-and-test]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Check required CI jobs
+        env:
+          CLASSIFY_RESULT: ${{ needs.classify-ci-trust.result }}
+          TRUSTED: ${{ needs.classify-ci-trust.outputs.trusted }}
+          BUILD_AND_TEST_RESULT: ${{ needs.build-and-test.result }}
+        run: |
+          set -euo pipefail
+          if [ "$CLASSIFY_RESULT" != "success" ]; then
+            echo "::error::classify-ci-trust result is $CLASSIFY_RESULT"
+            exit 1
+          fi
+          if [ "$TRUSTED" != "true" ]; then
+            echo "::error::External pull requests are not accepted for this portfolio repository."
+            exit 1
+          fi
+          if [ "$BUILD_AND_TEST_RESULT" != "success" ]; then
+            echo "::error::build-and-test result is $BUILD_AND_TEST_RESULT"
+            exit 1
+          fi
+          echo "All required CI jobs passed."

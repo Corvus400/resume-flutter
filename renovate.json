@@ -1,0 +1,40 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard"
+  ],
+  "timezone": "Asia/Tokyo",
+  "schedule": [
+    "before 1am on sunday"
+  ],
+  "dependencyDashboard": true,
+  "enabledManagers": [
+    "pub",
+    "github-actions"
+  ],
+  "labels": [
+    "dependencies",
+    "renovate"
+  ],
+  "prConcurrentLimit": 3,
+  "prHourlyLimit": 1,
+  "automerge": false,
+  "pinDigests": true,
+  "packageRules": [
+    {
+      "description": "Group Dart and Flutter package updates",
+      "matchManagers": [
+        "pub"
+      ],
+      "groupName": "Dart and Flutter packages"
+    },
+    {
+      "description": "Require manual review for GitHub Actions updates",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "groupName": "GitHub Actions"
+    }
+  ]
+}
