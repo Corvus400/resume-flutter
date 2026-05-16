@@ -136,87 +136,87 @@ class _ExperienceRowState extends State<_ExperienceRow> {
   @override
   Widget build(BuildContext context) {
     final experience = widget.experience;
-    return FocusableActionDetector(
-      key: Key('experience-row-focus-${experience.id}'),
-      mouseCursor: SystemMouseCursors.click,
-      onFocusChange: (focused) => setState(() => _focused = focused),
-      onShowFocusHighlight: (focused) => setState(() => _focused = focused),
-      child: InkWell(
-        onTap: () => context.go('/experience/${experience.id}'),
-        onHover: (hovered) => setState(() => _hovered = hovered),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: FocusableActionDetector(
+        key: Key('experience-row-focus-${experience.id}'),
+        mouseCursor: SystemMouseCursors.click,
         onFocusChange: (focused) => setState(() => _focused = focused),
-        hoverColor: Colors.transparent,
-        focusColor: Colors.transparent,
-        splashColor: AppColors.line.withValues(alpha: 0.22),
-        child: AnimatedContainer(
-          key: Key('experience-row-${experience.id}'),
-          duration: const Duration(milliseconds: 140),
-          padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 0),
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-            border: Border(
-              top: const BorderSide(color: AppColors.line),
-              bottom: (_hovered || _focused)
-                  ? const BorderSide(color: AppColors.lineStrong)
-                  : BorderSide.none,
+        onShowFocusHighlight: (focused) => setState(() => _focused = focused),
+        child: InkWell(
+          onTap: () => context.go('/experience/${experience.id}'),
+          onFocusChange: (focused) => setState(() => _focused = focused),
+          hoverColor: Colors.transparent,
+          focusColor: Colors.transparent,
+          splashColor: AppColors.line.withValues(alpha: 0.22),
+          child: AnimatedContainer(
+            key: Key('experience-row-${experience.id}'),
+            duration: const Duration(milliseconds: 140),
+            padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 0),
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              border: Border(
+                top: const BorderSide(color: AppColors.line),
+                bottom: (_hovered || _focused)
+                    ? const BorderSide(color: AppColors.lineStrong)
+                    : BorderSide.none,
+              ),
             ),
-          ),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final isMobile = constraints.maxWidth < 680;
-              final dateBlock = _DateBlock(experience: experience);
-              final contentBlock = _ExperienceContent(experience: experience);
-              final arrowActive = _hovered || _focused;
-              final arrow = Container(
-                key: Key('experience-row-arrow-${experience.id}'),
-                width: 44,
-                height: 44,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.surface,
-                  border: Border.all(
-                    color: arrowActive ? AppColors.lineStrong : AppColors.line,
-                  ),
-                ),
-                child: Text(
-                  '→',
-                  style: TextStyle(
-                    color: arrowActive ? AppColors.primary : AppColors.ink700,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              );
-
-              if (isMobile) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(child: dateBlock),
-                        const SizedBox(width: AppSpacing.s4),
-                        arrow,
-                      ],
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final isMobile = constraints.maxWidth < 680;
+                final dateBlock = _DateBlock(experience: experience);
+                final contentBlock = _ExperienceContent(experience: experience);
+                final arrowActive = _hovered || _focused;
+                final arrow = CircleAvatar(
+                  key: Key('experience-row-arrow-${experience.id}'),
+                  radius: 22,
+                  backgroundColor: arrowActive
+                      ? AppColors.primary
+                      : AppColors.surface,
+                  child: Text(
+                    '→',
+                    style: TextStyle(
+                      color: arrowActive
+                          ? AppColors.onPrimary
+                          : AppColors.ink700,
+                      fontWeight: FontWeight.w700,
                     ),
-                    const SizedBox(height: AppSpacing.s4),
-                    contentBlock,
+                  ),
+                );
+
+                if (isMobile) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(child: dateBlock),
+                          const SizedBox(width: AppSpacing.s4),
+                          arrow,
+                        ],
+                      ),
+                      const SizedBox(height: AppSpacing.s4),
+                      contentBlock,
+                    ],
+                  );
+                }
+
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(width: 120, child: dateBlock),
+                    const SizedBox(width: AppSpacing.s8),
+                    Expanded(child: contentBlock),
+                    const SizedBox(width: AppSpacing.s8),
+                    arrow,
                   ],
                 );
-              }
-
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(width: 120, child: dateBlock),
-                  const SizedBox(width: AppSpacing.s8),
-                  Expanded(child: contentBlock),
-                  const SizedBox(width: AppSpacing.s8),
-                  arrow,
-                ],
-              );
-            },
+              },
+            ),
           ),
         ),
       ),

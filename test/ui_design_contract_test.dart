@@ -123,11 +123,10 @@ void main() {
       expect(decoration.color, anyOf(isNull, equals(Colors.transparent)));
       expect(decoration.border, isNotNull);
 
-      final hoveredArrow = tester.widget<Container>(
+      final hoveredArrow = tester.widget<CircleAvatar>(
         find.byKey(const Key('experience-row-arrow-oisix')),
       );
-      final hoveredArrowDecoration = hoveredArrow.decoration as BoxDecoration;
-      expect(hoveredArrowDecoration.color, equals(AppColors.surface));
+      expect(hoveredArrow.backgroundColor, equals(AppColors.primary));
     });
 
     testWidgets('keyboard focus does not use bright filled focus colors', (
