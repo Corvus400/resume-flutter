@@ -114,6 +114,8 @@ void main() {
         );
         expect(resumeFlutter.tags, ['Flutter', 'Dart', 'go_router']);
         expect(resumeFlutter.tags, isNot(contains('Design Spec')));
+        expect(resumeFlutter.status, '公開中');
+        expect(resumeFlutter.imageAssetPath, 'assets/readme/header.png');
       },
     );
   });

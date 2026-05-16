@@ -386,7 +386,15 @@ void main() {
 
         expect(find.byKey(const Key('phone-nav-rail')), findsNothing);
         expect(find.byKey(const Key('project-grid')), findsOneWidget);
-        expect(find.byKey(const Key('project-card-0')), findsOneWidget);
+        final firstCard = find.byKey(const Key('project-card-0'));
+        final footer = find.byKey(const Key('project-card-footer-0'));
+        expect(firstCard, findsOneWidget);
+        expect(footer, findsOneWidget);
+
+        final cardRect = tester.getRect(firstCard);
+        final footerRect = tester.getRect(footer);
+        expect(cardRect.height, lessThan(520));
+        expect(footerRect.bottom, lessThanOrEqualTo(cardRect.bottom));
       }
     });
   });

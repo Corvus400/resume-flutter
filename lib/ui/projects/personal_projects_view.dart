@@ -50,23 +50,22 @@ class PersonalProjectsView extends StatelessWidget {
               }
 
               final columns = constraints.maxWidth < 760 ? 1 : 2;
-              final cardHeight = columns == 1 ? 660.0 : 560.0;
-              return GridView.count(
+              final spacing = AppSpacing.s6;
+              final cardWidth =
+                  (constraints.maxWidth - spacing * (columns - 1)) / columns;
+              return Wrap(
                 key: const Key('project-grid'),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: columns,
-                mainAxisSpacing: AppSpacing.s6,
-                crossAxisSpacing: AppSpacing.s6,
-                childAspectRatio:
-                    (constraints.maxWidth / columns - AppSpacing.s3) /
-                    cardHeight,
+                spacing: spacing,
+                runSpacing: spacing,
                 children: [
                   for (final indexed in viewModel.projects.indexed)
-                    _ProjectCard(
-                      key: Key('project-card-${indexed.$1}'),
-                      project: indexed.$2,
-                      index: indexed.$1,
+                    SizedBox(
+                      width: cardWidth,
+                      child: _ProjectCard(
+                        key: Key('project-card-${indexed.$1}'),
+                        project: indexed.$2,
+                        index: indexed.$1,
+                      ),
                     ),
                 ],
               );
@@ -181,7 +180,6 @@ class _ProjectCardState extends State<_ProjectCard> {
                   ],
                 ),
               ),
-              if (!compact) const Spacer(),
               Container(
                 key: Key('project-card-footer-${widget.index}'),
                 padding: const EdgeInsets.symmetric(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:resume_flutter/app.dart';
+import 'package:resume_flutter/data/resume_data.dart';
 import 'package:resume_flutter/router.dart';
 
 var _fontsLoaded = false;
@@ -16,6 +17,23 @@ Future<void> _loadFonts() async {
   _fontsLoaded = true;
 }
 
+Future<void> _precacheGoldenImages(WidgetTester tester) async {
+  final context = tester.element(find.byType(ResumeFlutterApp));
+  await tester.runAsync(() async {
+    await Future.wait([
+      precacheImage(const AssetImage('assets/images/Insights.png'), context),
+      precacheImage(
+        const AssetImage('assets/images/profile/avatar.png'),
+        context,
+      ),
+      for (final project in personalProjects)
+        if (project.imageAssetPath != null)
+          precacheImage(AssetImage(project.imageAssetPath!), context),
+    ]);
+  });
+  await tester.pumpAndSettle();
+}
+
 Future<void> _pumpDesktopApp(WidgetTester tester) async {
   await _loadFonts();
   appRouter.go('/');
@@ -25,6 +43,7 @@ Future<void> _pumpDesktopApp(WidgetTester tester) async {
   addTearDown(tester.view.resetDevicePixelRatio);
 
   await tester.pumpWidget(const ResumeFlutterApp());
+  await _precacheGoldenImages(tester);
   await tester.pumpAndSettle();
 }
 
@@ -37,6 +56,7 @@ Future<void> _pumpPhoneApp(WidgetTester tester) async {
   addTearDown(tester.view.resetDevicePixelRatio);
 
   await tester.pumpWidget(const ResumeFlutterApp());
+  await _precacheGoldenImages(tester);
   await tester.pumpAndSettle();
 }
 

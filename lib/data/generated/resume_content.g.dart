@@ -707,8 +707,9 @@ const personalProjects = <PersonalProject>[
     kind: 'Flutter Web',
     summary: '職務経歴をFlutter Webで構造化表示するための実装リポジトリ。',
     repoUrl: 'https://github.com/Corvus400/resume-flutter',
-    status: '作成中',
+    status: '公開中',
     tags: <String>['Flutter', 'Dart', 'go_router'],
+    imageAssetPath: 'assets/readme/header.png',
   ),
 ];
 
