@@ -1,3 +1,5 @@
+import '../../data/resume_data.dart';
+
 class HomeViewModel {
-  String get avatarAssetPath => 'assets/images/profile/avatar.png';
+  String get avatarAssetPath => homeProfileAvatarAssetPath;
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../data/models/experience.dart';
+import '../../data/resume_data.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../common/components.dart';
@@ -38,8 +39,8 @@ class _ExperienceListViewState extends State<ExperienceListView> {
               ),
         children: [
           SectionHeader(
-            eyebrow: '02 — Work Experience',
-            title: '職務経歴',
+            eyebrow: experienceSection.eyebrow,
+            title: experienceSection.title,
             trailing: Text(
               viewModel.totalLabel,
               style: TextStyle(color: AppColors.ink300, letterSpacing: 2),

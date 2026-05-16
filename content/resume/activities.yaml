@@ -1,0 +1,117 @@
+groups:
+  -
+    label: "droidkaigi"
+    title: "DroidKaigi"
+    count: "4年分"
+    items:
+      -
+        period: "2025.08 – 2025.09"
+        title: "DroidKaigi2025 コントリビュート"
+        detail: "24日間コントリビュート · Zenn記事"
+        links:
+          -
+            label: "Zenn"
+            url: "https://zenn.dev/todayama_r/articles/6a4f24033ba7be"
+      -
+        period: "2024.08 – 2024.09"
+        title: "DroidKaigi2024 コントリビュート"
+        detail: "31日間コントリビュート · Zenn記事 · Welcome Talk · 貢献順位"
+        links:
+          -
+            label: "Zenn"
+            url: "https://zenn.dev/todayama_r/articles/55ddcb366cbc50"
+          -
+            label: "Welcome Talk"
+            url: "https://x.com/Todayama_R/status/1834398835327861168"
+          -
+            label: "貢献順位"
+            url: "https://x.com/Todayama_R/status/1834398443361763519"
+      -
+        period: "2023.08 – 2023.09"
+        title: "DroidKaigi2023 コントリビュート"
+        detail: "30日間コントリビュート · Zenn記事 · Welcome Talk · 貢献順位"
+        links:
+          -
+            label: "Zenn"
+            url: "https://zenn.dev/todayama_r/articles/404e358eaac1f1"
+          -
+            label: "Welcome Talk"
+            url: "https://x.com/Todayama_R/status/1702496851340193816?s=20"
+          -
+            label: "貢献順位"
+            url: "https://twitter.com/Todayama_R/status/1702496604190847010"
+      -
+        period: "2022.09 – 2022.10"
+        title: "DroidKaigi2022 コントリビュート"
+        detail: "26日間でPRを38個作成 · Issue 16個消化 · Welcome Talk"
+        links:
+          -
+            label: "PR"
+            url: "https://github.com/DroidKaigi/conference-app-2022/pulls?q=is%3Apr+author%3ACorvus400+"
+          -
+            label: "awesome"
+            url: "https://github.com/DroidKaigi/conference-app-2022/pulls?q=is%3Apr+author%3ACorvus400+is%3Aclosed+label%3Aawesome"
+          -
+            label: "Issue"
+            url: "https://github.com/DroidKaigi/conference-app-2022/issues?q=is%3Aissue+assignee%3ACorvus400"
+          -
+            label: "YouTube"
+            url: "https://www.youtube.com/watch?v=P8BZw_yCokc&t=5327s"
+  -
+    label: "writing"
+    title: "執筆"
+    count: "Zenn"
+    items:
+      -
+        period: "2025.06"
+        title: "Zenn: DroidKaigi contribution write-ups"
+        detail: "DroidKaigi コントリビュートの振り返り"
+        links:
+          -
+            label: "DroidKaigi2025"
+            url: "https://zenn.dev/todayama_r/articles/6a4f24033ba7be"
+          -
+            label: "DroidKaigi2024"
+            url: "https://zenn.dev/todayama_r/articles/55ddcb366cbc50"
+          -
+            label: "DroidKaigi2023"
+            url: "https://zenn.dev/todayama_r/articles/404e358eaac1f1"
+      -
+        period: "2024.12"
+        title: "Android Developers 翻訳動画"
+        detail: "参画先のキャッチアップ時間で話題提供"
+        links:
+          -
+            label: "Zenn"
+            url: "https://zenn.dev/todayama_r"
+  -
+    label: "recognition"
+    title: "紹介・認知"
+    count: "Welcome Talk"
+    items:
+      -
+        period: "2022 – 現在"
+        title: "DroidKaigi community contribution"
+        detail: "Welcome Talk にて紹介"
+        links:
+          -
+            label: "2024 Welcome Talk"
+            url: "https://x.com/Todayama_R/status/1834398835327861168"
+          -
+            label: "2023 Welcome Talk"
+            url: "https://x.com/Todayama_R/status/1702496851340193816?s=20"
+          -
+            label: "2022 Welcome Talk"
+            url: "https://www.youtube.com/watch?v=P8BZw_yCokc&t=5327s"
+      -
+        period: "2023 – 2024"
+        title: "Welcome Talk recognition"
+        detail: "貢献順位に関する紹介"
+        links:
+          -
+            label: "2024 貢献順位"
+            url: "https://x.com/Todayama_R/status/1834398443361763519"
+          -
+            label: "2023 貢献順位"
+            url: "https://twitter.com/Todayama_R/status/1702496604190847010"
+

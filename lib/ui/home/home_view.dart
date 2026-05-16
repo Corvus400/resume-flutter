@@ -73,23 +73,24 @@ class _HeroLead extends StatelessWidget {
           children: [
             Container(width: 40, height: 1, color: AppColors.ink300),
             const SizedBox(width: AppSpacing.s3),
-            const Eyebrow('Resume · 2026'),
+            const Eyebrow(homeHeroEyebrow),
           ],
         ),
         const SizedBox(height: 28),
         RichText(
           text: TextSpan(
             style: displayStyle,
-            children: const [
-              TextSpan(text: '経験と実装を\n'),
-              TextSpan(
-                text: 'Flutter Web',
-                style: TextStyle(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w800,
+            children: [
+              for (final segment in homeHeroHeadlineSegments)
+                TextSpan(
+                  text: segment.text,
+                  style: segment.highlight
+                      ? const TextStyle(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w800,
+                        )
+                      : null,
                 ),
-              ),
-              TextSpan(text: ' で\n構造化して伝える。'),
             ],
           ),
         ),
@@ -104,13 +105,9 @@ class _HeroLead extends StatelessWidget {
           ),
         ),
         const SizedBox(height: AppSpacing.s5),
-        Text(
-          'Android Mobile 8年、Kotlin 7年を軸に、設計・実装・テスト基盤まで一貫して扱います。',
-          style: const TextStyle(
-            color: AppColors.ink500,
-            fontSize: 15,
-            height: 1.87,
-          ),
+        const Text(
+          homeHeroSummary,
+          style: TextStyle(color: AppColors.ink500, fontSize: 15, height: 1.87),
         ),
         const SizedBox(height: AppSpacing.s8),
         const Divider(color: AppColors.line),
@@ -118,16 +115,15 @@ class _HeroLead extends StatelessWidget {
         Wrap(
           spacing: 28,
           runSpacing: AppSpacing.s2,
-          children: const [
-            _Meta(label: '拠点', value: '日本'),
-            _Meta(label: 'モバイル経験', value: '8 年'),
-            _Meta(label: '母語', value: '日本語'),
+          children: [
+            for (final item in homeHeroMetaItems)
+              _Meta(label: item.label, value: item.value),
           ],
         ),
         const SizedBox(height: 36),
         FilledButton(
           onPressed: () => context.go('/experience'),
-          child: const Text('職務経歴を見る  →'),
+          child: const Text(homeHeroCtaLabel),
         ),
       ],
     );
@@ -232,7 +228,7 @@ class _ProfileCard extends StatelessWidget {
                 ),
                 SizedBox(width: AppSpacing.s3),
                 Text(
-                  '2026',
+                  homeProfileCardYear,
                   style: TextStyle(
                     fontSize: 11,
                     letterSpacing: 2,
@@ -242,16 +238,14 @@ class _ProfileCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: AppSpacing.s8),
-            const Eyebrow('At a glance'),
+            const Eyebrow(homeProfileCardEyebrow),
             const SizedBox(height: AppSpacing.s5),
-            const Wrap(
+            Wrap(
               spacing: AppSpacing.s10,
               runSpacing: AppSpacing.s6,
               children: [
-                _Stat(value: '8年', label: 'Android Mobile'),
-                _Stat(value: '7年', label: 'Kotlin'),
-                _Stat(value: '24件', label: '職務経歴'),
-                _Stat(value: '247件', label: 'DroidKaigi マージPR'),
+                for (final stat in homeProfileStats)
+                  _Stat(value: stat.value, label: stat.label),
               ],
             ),
             const SizedBox(height: AppSpacing.s6),

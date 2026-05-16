@@ -109,7 +109,7 @@ abstract class AppLocalizations {
   /// Home page summary before design implementation
   ///
   /// In ja, this message translates to:
-  /// **'職務経歴を Flutter native widget で構造化表示するための初期スキャフォールドです。'**
+  /// **'AI時代のモバイル開発を、設計力と検証力で加速するエンジニアの職務経歴です。'**
   String get homeSummary;
 
   /// Status label shown before the design HTML is available

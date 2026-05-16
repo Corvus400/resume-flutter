@@ -1,0 +1,80 @@
+order:
+  - "ai"
+  - "language"
+  - "platform"
+titles:
+  ai: "AI活用歴"
+  language: "言語"
+  platform: "プラットフォーム / フレームワーク"
+groups:
+  language:
+    -
+      name: "Kotlin"
+      experienceLabel: "7年(86ヶ月)"
+      experienceMonths: 86
+    -
+      name: "Java"
+      experienceLabel: "3年(35ヶ月)"
+      experienceMonths: 35
+    -
+      name: "C++"
+      experienceLabel: "1.5年(18ヶ月)"
+      experienceMonths: 18
+    -
+      name: "Swift"
+      experienceLabel: "8ヶ月"
+      experienceMonths: 8
+    -
+      name: "JavaScript"
+      experienceLabel: "6ヶ月相当"
+      experienceMonths: 6
+    -
+      name: "Dart"
+      experienceLabel: "4ヶ月"
+      experienceMonths: 4
+    -
+      name: "Objective-C"
+      experienceLabel: "1ヶ月相当"
+      experienceMonths: 1
+  platform:
+    -
+      name: "Android Mobile"
+      experienceLabel: "8年(96ヶ月)"
+      experienceMonths: 96
+    -
+      name: "Cocos2d-x"
+      experienceLabel: "1.5年(18ヶ月)"
+      experienceMonths: 18
+    -
+      name: "iOS"
+      experienceLabel: "8ヶ月"
+      experienceMonths: 8
+    -
+      name: "Android TV"
+      experienceLabel: "6ヶ月"
+      experienceMonths: 6
+    -
+      name: "Flutter"
+      experienceLabel: "4ヶ月"
+      experienceMonths: 4
+  ai:
+    -
+      name: "Claude Code"
+      experienceLabel: "9ヶ月"
+      experienceMonths: 9
+    -
+      name: "GitHub Copilot CLI"
+      experienceLabel: "2ヶ月"
+      experienceMonths: 2
+    -
+      name: "Devin"
+      experienceLabel: "2ヶ月"
+      experienceMonths: 2
+    -
+      name: "Codex"
+      experienceLabel: "2ヶ月"
+      experienceMonths: 2
+    -
+      name: "Claude Design"
+      experienceLabel: "1ヶ月"
+      experienceMonths: 1

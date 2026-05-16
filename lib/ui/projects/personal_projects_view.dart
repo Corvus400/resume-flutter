@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../data/models/personal_project.dart';
+import '../../data/resume_data.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../common/components.dart';
@@ -19,8 +20,8 @@ class PersonalProjectsView extends StatelessWidget {
       child: PageStage(
         children: [
           SectionHeader(
-            eyebrow: '04 — Personal Projects',
-            title: '個人開発',
+            eyebrow: projectsSection.eyebrow,
+            title: projectsSection.title,
             trailing: Text(
               viewModel.countLabel,
               style: TextStyle(color: AppColors.ink300, letterSpacing: 2),

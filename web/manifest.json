@@ -1,11 +1,11 @@
 {
-    "name": "Resume Flutter",
-    "short_name": "Resume",
+    "name": "とだやま.ℝ Resume Flutter",
+    "short_name": "Todayama_R",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#f5f1eb",
     "theme_color": "#9f4014",
-    "description": "とだやま.ℝ(Todayama_R) の Flutter Web ポートフォリオ。",
+    "description": "AI時代のモバイル開発を、設計力と検証力で加速するエンジニアのFlutter Webポートフォリオ。",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

@@ -15,8 +15,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeHeading => 'Flutter Web ポートフォリオ';
 
   @override
-  String get homeSummary =>
-      '職務経歴を Flutter native widget で構造化表示するための初期スキャフォールドです。';
+  String get homeSummary => 'AI時代のモバイル開発を、設計力と検証力で加速するエンジニアの職務経歴です。';
 
   @override
   String get designPending => 'Claude Design 仕様投入待ち';

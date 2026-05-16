@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../data/models/skill_entry.dart';
+import '../../data/resume_data.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../common/components.dart';
@@ -18,28 +19,20 @@ class SkillsView extends StatelessWidget {
       mobileTitle: 'スキル',
       child: PageStage(
         children: [
-          const SectionHeader(eyebrow: '06 — Skills', title: 'スキル'),
+          SectionHeader(
+            eyebrow: skillsSection.eyebrow,
+            title: skillsSection.title,
+          ),
           const SizedBox(height: AppSpacing.s6),
-          _SkillBlock(
-            blockKey: const Key('skill-block-language'),
-            title: '言語',
-            entries: viewModel.groupedSkills[SkillCategory.language]!,
-            maxMonths: viewModel.maxMonths,
-            isFirst: true,
-          ),
-          _SkillBlock(
-            blockKey: const Key('skill-block-platform'),
-            title: 'プラットフォーム / フレームワーク',
-            entries: viewModel.groupedSkills[SkillCategory.platform]!,
-            maxMonths: viewModel.maxMonths,
-          ),
-          _SkillBlock(
-            blockKey: const Key('skill-block-ai'),
-            title: 'AI活用歴',
-            entries: viewModel.groupedSkills[SkillCategory.ai]!,
-            maxMonths: viewModel.maxMonths,
-            isLast: true,
-          ),
+          for (final indexed in viewModel.categoryOrder.indexed)
+            _SkillBlock(
+              blockKey: Key('skill-block-${indexed.$2.name}'),
+              title: viewModel.categoryTitle(indexed.$2),
+              entries: viewModel.groupedSkills[indexed.$2]!,
+              maxMonths: viewModel.maxMonths,
+              isFirst: indexed.$1 == 0,
+              isLast: indexed.$1 == viewModel.categoryOrder.length - 1,
+            ),
         ],
       ),
     );

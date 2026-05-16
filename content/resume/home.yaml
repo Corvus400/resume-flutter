@@ -1,0 +1,37 @@
+eyebrow: "Resume · 2026"
+headlineSegments:
+  -
+    text: "AI時代"
+    highlight: true
+  -
+    text: "の\nモバイル開発を、\n設計力と検証力で\n加速する。"
+summary: "Android Mobile 8年、Kotlin 7年を軸に、設計・実装・テスト基盤まで一貫して扱います。"
+meta:
+  -
+    label: "拠点"
+    value: "日本"
+  -
+    label: "モバイル経験"
+    value: "8 年"
+  -
+    label: "母語"
+    value: "日本語"
+ctaLabel: "職務経歴を見る  →"
+profileCard:
+  year: "2026"
+  eyebrow: "At a glance"
+  avatarAssetPath: "assets/images/profile/avatar.png"
+  stats:
+    -
+      value: "8年"
+      label: "Android Mobile"
+    -
+      value: "7年"
+      label: "Kotlin"
+    -
+      value: "24件"
+      label: "職務経歴"
+    -
+      value: "247件"
+      label: "DroidKaigi マージPR"
+

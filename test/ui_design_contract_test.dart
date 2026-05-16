@@ -65,9 +65,9 @@ void main() {
       await _pumpMobileApp(tester);
 
       for (final entry in const [
-        ('projects', '04 — Personal Projects'),
-        ('activities', '05 — Outside Activities'),
-        ('skills', '06 — Skills'),
+        ('projects', 'Personal Projects'),
+        ('activities', 'Outside Activities'),
+        ('skills', 'Skills'),
       ]) {
         await tester.tap(find.byKey(Key('phone-nav-${entry.$1}')));
         await tester.pumpAndSettle();
@@ -304,15 +304,27 @@ void main() {
       await tester.pumpAndSettle();
 
       for (final key in [
+        const Key('skill-block-ai'),
         const Key('skill-block-language'),
         const Key('skill-block-platform'),
-        const Key('skill-block-ai'),
       ]) {
         final decoration =
             tester.widget<DecoratedBox>(find.byKey(key)).decoration
                 as BoxDecoration;
         expect(decoration.border, isNotNull);
       }
+
+      final aiTop = tester
+          .getTopLeft(find.byKey(const Key('skill-block-ai')))
+          .dy;
+      final languageTop = tester
+          .getTopLeft(find.byKey(const Key('skill-block-language')))
+          .dy;
+      final platformTop = tester
+          .getTopLeft(find.byKey(const Key('skill-block-platform')))
+          .dy;
+      expect(aiTop, lessThan(languageTop));
+      expect(languageTop, lessThan(platformTop));
     });
   });
 

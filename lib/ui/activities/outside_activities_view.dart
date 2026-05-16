@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../data/models/experience.dart';
 import '../../data/models/outside_activity.dart';
+import '../../data/resume_data.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../common/components.dart';
@@ -28,12 +29,15 @@ class OutsideActivitiesView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Eyebrow('05 — Outside Activities'),
+                Eyebrow(activitiesSection.eyebrow),
                 const SizedBox(height: AppSpacing.s3),
-                Text('その他活動', style: Theme.of(context).textTheme.headlineLarge),
+                Text(
+                  activitiesSection.title,
+                  style: Theme.of(context).textTheme.headlineLarge,
+                ),
                 const SizedBox(height: AppSpacing.s2),
                 Text(
-                  'DroidKaigi コントリビュート、Zenn での振り返り、Android Developers 翻訳動画など、業務外活動の記録。',
+                  activitiesSection.summary!,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ],

@@ -1,0 +1,14 @@
+experience:
+  eyebrow: "Work Experience"
+  title: "職務経歴"
+projects:
+  eyebrow: "Personal Projects"
+  title: "個人開発"
+activities:
+  eyebrow: "Outside Activities"
+  title: "その他活動"
+  summary: "DroidKaigi コントリビュート、Zenn での振り返り、Android Developers 翻訳動画など、業務外活動の記録。"
+skills:
+  eyebrow: "Skills"
+  title: "スキル"
+

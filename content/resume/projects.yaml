@@ -1,0 +1,34 @@
+items:
+  -
+    name: "fictional-drug-and-disease-ref-flutter(メディマスタ)"
+    kind: "Flutter app"
+    summary: "架空医薬品・疾患データを扱う医療リファレンスアプリの参考実装。"
+    repoUrl: "https://github.com/Corvus400/fictional-drug-and-disease-ref-flutter"
+    status: "公開中"
+    tags:
+      - "Flutter"
+      - "Drift"
+      - "Dio / Retrofit"
+    imageAssetPath: "assets/images/readme/fddr_flutter_header.png"
+  -
+    name: "fictional-drug-and-disease-ref-mock-server(メディマスタ)"
+    kind: "Ktor Mock Server"
+    summary: "医薬品・疾患リファレンスアプリ用の Scenario-based Mock Server。"
+    repoUrl: "https://github.com/Corvus400/fictional-drug-and-disease-ref-mock-server"
+    status: "公開中"
+    tags:
+      - "Kotlin"
+      - "Ktor 3.x"
+      - "ktor-openapi-tools"
+    imageAssetPath: "assets/images/readme/fddr_mock_server_header.png"
+  -
+    name: "resume-flutter"
+    kind: "Flutter Web"
+    summary: "職務経歴をFlutter Webで構造化表示するための実装リポジトリ。"
+    repoUrl: "https://github.com/Corvus400/resume-flutter"
+    status: "作成中"
+    tags:
+      - "Flutter"
+      - "Dart"
+      - "go_router"
+

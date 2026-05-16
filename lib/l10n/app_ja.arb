@@ -8,7 +8,7 @@
   "@homeHeading": {
     "description": "Home page heading"
   },
-  "homeSummary": "職務経歴を Flutter native widget で構造化表示するための初期スキャフォールドです。",
+  "homeSummary": "AI時代のモバイル開発を、設計力と検証力で加速するエンジニアの職務経歴です。",
   "@homeSummary": {
     "description": "Home page summary before design implementation"
   },
