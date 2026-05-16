@@ -1,3 +1,3 @@
 class HomeViewModel {
-  String get insightsImageAssetPath => 'assets/images/Insights.png';
+  String get avatarAssetPath => 'assets/images/profile/avatar.png';
 }

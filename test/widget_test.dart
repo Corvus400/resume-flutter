@@ -3,18 +3,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:resume_flutter/app.dart';
 
 void main() {
-  testWidgets('shows the Phase 2 scaffold screen', (tester) async {
+  testWidgets('shows the Phase 4 hero screen', (tester) async {
     await tester.pumpWidget(const ResumeFlutterApp());
     await tester.pumpAndSettle();
 
-    expect(find.text('Flutter Web ポートフォリオ'), findsOneWidget);
-    expect(find.text('Claude Design 仕様投入待ち'), findsOneWidget);
+    expect(find.text('職務経歴を見る  →'), findsOneWidget);
+    expect(find.textContaining('Android Mobile 8年'), findsOneWidget);
+    expect(find.text('DroidKaigi マージPR'), findsOneWidget);
   });
 
-  testWidgets('loads the Insights image asset', (tester) async {
+  testWidgets('loads profile image asset', (tester) async {
     await tester.pumpWidget(const ResumeFlutterApp());
     await tester.pumpAndSettle();
 
-    expect(find.byType(Image), findsOneWidget);
+    expect(find.byType(Image), findsWidgets);
   });
 }
