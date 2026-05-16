@@ -202,4 +202,24 @@ void main() {
       }
     });
   });
+
+  group('Outside activities design contract', () {
+    testWidgets('activity titles keep readable width on desktop', (
+      tester,
+    ) async {
+      await _pumpDesktopApp(tester);
+
+      await tester.tap(find.text('その他活動').first);
+      await tester.pumpAndSettle();
+
+      final droidKaigi2024 = find.text('DroidKaigi2024 コントリビュート');
+      expect(droidKaigi2024, findsOneWidget);
+      expect(tester.getSize(droidKaigi2024).width, greaterThan(180));
+
+      final footerTop = tester
+          .getTopLeft(find.text('FLUTTER WEB · HASH ROUTING'))
+          .dy;
+      expect(footerTop, lessThan(1800));
+    });
+  });
 }

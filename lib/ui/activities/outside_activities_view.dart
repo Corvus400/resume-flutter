@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../data/models/experience.dart';
 import '../../data/models/outside_activity.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
@@ -158,42 +159,72 @@ class _ActivityBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.sizeOf(context).width < 600;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(item.title, style: Theme.of(context).textTheme.titleMedium),
-              const SizedBox(height: AppSpacing.s2),
-              Text(item.detail, style: Theme.of(context).textTheme.bodyMedium),
-            ],
-          ),
-        ),
-        if (item.links.isNotEmpty && !isMobile) ...[
-          const SizedBox(width: AppSpacing.s4),
-          Wrap(
-            spacing: AppSpacing.s3,
-            runSpacing: AppSpacing.s2,
-            alignment: WrapAlignment.end,
-            children: [
-              for (final link in item.links)
-                ExternalTextLink(
-                  key: Key('outside-activity-link-${link.url}'),
-                  url: link.url,
-                  child: Text(
-                    '${link.label} ↗',
-                    style: const TextStyle(
-                      color: AppColors.ink300,
-                      fontSize: 11,
-                      letterSpacing: 2,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final canPlaceLinksInline =
+            item.links.isNotEmpty && !isMobile && constraints.maxWidth >= 560;
+        final links = _ActivityLinks(links: item.links);
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (canPlaceLinksInline)
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      item.title,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
-                ),
+                  const SizedBox(width: AppSpacing.s4),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 280),
+                    child: Align(alignment: Alignment.topRight, child: links),
+                  ),
+                ],
+              )
+            else
+              Text(item.title, style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: AppSpacing.s2),
+            Text(item.detail, style: Theme.of(context).textTheme.bodyMedium),
+            if (item.links.isNotEmpty && !canPlaceLinksInline) ...[
+              const SizedBox(height: AppSpacing.s2),
+              links,
             ],
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _ActivityLinks extends StatelessWidget {
+  const _ActivityLinks({required this.links});
+
+  final List<ResumeLink> links;
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: AppSpacing.s3,
+      runSpacing: AppSpacing.s2,
+      alignment: WrapAlignment.end,
+      children: [
+        for (final link in links)
+          ExternalTextLink(
+            key: Key('outside-activity-link-${link.url}'),
+            url: link.url,
+            child: Text(
+              '${link.label} ↗',
+              style: const TextStyle(
+                color: AppColors.ink300,
+                fontSize: 11,
+                letterSpacing: 2,
+              ),
+            ),
           ),
-        ],
       ],
     );
   }
