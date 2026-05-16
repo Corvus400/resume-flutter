@@ -109,6 +109,27 @@ void main() {
       expect(decoration.boxShadow, isNotEmpty);
     });
 
+    testWidgets('phone portrait profile avatar remains circular inside rail', (
+      tester,
+    ) async {
+      await _pumpMobileApp(tester);
+
+      final card = find.byKey(const Key('profile-card'));
+      final frame = find.byKey(const Key('profile-avatar-frame'));
+      final image = find.descendant(of: frame, matching: find.byType(Image));
+      expect(card, findsOneWidget);
+      expect(frame, findsOneWidget);
+      expect(image, findsOneWidget);
+
+      final cardRect = tester.getRect(card);
+      final frameRect = tester.getRect(frame);
+      final imageRect = tester.getRect(image);
+      expect(frameRect.width, closeTo(frameRect.height, 0.1));
+      expect(imageRect.width, closeTo(imageRect.height, 0.1));
+      expect(frameRect.left, greaterThanOrEqualTo(cardRect.left + 28));
+      expect(frameRect.right, lessThanOrEqualTo(cardRect.right - 28));
+    });
+
     testWidgets('profile link values are aligned to the right edge', (
       tester,
     ) async {

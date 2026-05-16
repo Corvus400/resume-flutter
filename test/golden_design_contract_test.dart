@@ -57,6 +57,17 @@ void main() {
     );
   }, tags: ['golden']);
 
+  testWidgets('phone profile card avatar visual contract', (tester) async {
+    await _pumpPhoneApp(tester);
+    await tester.ensureVisible(find.byKey(const Key('profile-card')));
+    await tester.pumpAndSettle();
+
+    await expectLater(
+      find.byKey(const Key('profile-card')),
+      matchesGoldenFile('goldens/phone_profile_card.png'),
+    );
+  }, tags: ['golden']);
+
   testWidgets('phone experience list visual contract', (tester) async {
     await _pumpPhoneApp(tester);
     await tester.tap(find.byKey(const Key('phone-nav-experience')));

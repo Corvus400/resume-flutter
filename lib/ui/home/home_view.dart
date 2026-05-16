@@ -181,33 +181,43 @@ class _ProfileCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: DecoratedBox(
-                key: const Key('profile-avatar-frame'),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.surface,
-                  border: Border.all(color: AppColors.lineStrong, width: 3),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color(0x22000000),
-                      blurRadius: 18,
-                      offset: Offset(0, 10),
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: ClipOval(
-                    child: Image.asset(
-                      avatarAssetPath,
-                      width: 284,
-                      height: 284,
-                      fit: BoxFit.cover,
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final avatarFrameSize = constraints.maxWidth.clamp(0.0, 304.0);
+                return Center(
+                  child: SizedBox.square(
+                    dimension: avatarFrameSize,
+                    child: DecoratedBox(
+                      key: const Key('profile-avatar-frame'),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.surface,
+                        border: Border.all(
+                          color: AppColors.lineStrong,
+                          width: 3,
+                        ),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color(0x22000000),
+                            blurRadius: 18,
+                            offset: Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: ClipOval(
+                          child: Image.asset(
+                            avatarAssetPath,
+                            key: const Key('profile-avatar-image'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
             const SizedBox(height: AppSpacing.s6),
             const Row(
