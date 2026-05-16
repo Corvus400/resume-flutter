@@ -58,7 +58,7 @@ jobs:
           flutter build web --wasm --release --base-href "/${REPO_NAME}/"
           touch build/web/.nojekyll
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: build/web
 
