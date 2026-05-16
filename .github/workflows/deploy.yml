@@ -34,10 +34,12 @@ jobs:
         with:
           enablement: true
 
-      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
-        with:
-          channel: stable
-          flutter-version: 3.41.5
+      - name: Install Flutter
+        run: |
+          set -e
+          git clone --depth 1 --branch 3.41.5 https://github.com/flutter/flutter.git "$RUNNER_TEMP/flutter"
+          echo "$RUNNER_TEMP/flutter/bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/flutter/bin/flutter" --version
 
       - name: Install dependencies
         run: flutter pub get
