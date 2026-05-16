@@ -3,10 +3,23 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:resume_flutter/app.dart';
+import 'package:resume_flutter/router.dart';
 import 'package:resume_flutter/theme/app_colors.dart';
 
 Future<void> _pumpDesktopApp(WidgetTester tester) async {
+  appRouter.go('/');
   tester.view.physicalSize = const Size(1280, 900);
+  tester.view.devicePixelRatio = 1;
+  addTearDown(tester.view.resetPhysicalSize);
+  addTearDown(tester.view.resetDevicePixelRatio);
+
+  await tester.pumpWidget(const ResumeFlutterApp());
+  await tester.pumpAndSettle();
+}
+
+Future<void> _pumpMobileApp(WidgetTester tester) async {
+  appRouter.go('/');
+  tester.view.physicalSize = const Size(430, 932);
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.resetPhysicalSize);
   addTearDown(tester.view.resetDevicePixelRatio);
@@ -21,6 +34,50 @@ Future<void> _openExperienceList(WidgetTester tester) async {
 }
 
 void main() {
+  group('Mobile navigation contract', () {
+    testWidgets(
+      'top-level section links are visible without horizontal scroll',
+      (tester) async {
+        await _pumpMobileApp(tester);
+
+        for (final section in [
+          'home',
+          'experience',
+          'projects',
+          'activities',
+          'skills',
+        ]) {
+          final item = find.byKey(Key('mobile-nav-$section'));
+          expect(item, findsOneWidget);
+
+          final rect = tester.getRect(item);
+          expect(rect.left, greaterThanOrEqualTo(0));
+          expect(rect.right, lessThanOrEqualTo(430));
+          expect(rect.bottom, lessThan(320));
+        }
+      },
+    );
+
+    testWidgets('all top-level sections are reachable in portrait layout', (
+      tester,
+    ) async {
+      await _pumpMobileApp(tester);
+
+      for (final entry in const [
+        ('個人開発', '04 — Personal Projects'),
+        ('その他活動', '05 — Outside Activities'),
+        ('スキル', '06 — Skills'),
+      ]) {
+        await tester.ensureVisible(find.text(entry.$1).first);
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(entry.$1).first);
+        await tester.pumpAndSettle();
+
+        expect(find.text(entry.$2.toUpperCase()), findsOneWidget);
+      }
+    });
+  });
+
   group('Hero design contract', () {
     testWidgets('profile avatar has a framed circular image', (tester) async {
       await _pumpDesktopApp(tester);

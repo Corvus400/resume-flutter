@@ -85,36 +85,118 @@ class _AppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: isMobile ? 68 : 64,
-      padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? AppSpacing.s5 : AppSpacing.s12,
-      ),
+    return DecoratedBox(
       decoration: const BoxDecoration(
         color: AppColors.bg,
         border: Border(bottom: BorderSide(color: AppColors.line)),
       ),
-      child: Row(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          const CircleAvatar(
-            radius: 14,
-            backgroundImage: AssetImage('assets/images/profile/avatar.png'),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              isMobile ? (mobileTitle ?? activeSection.label) : profileName,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontWeight: FontWeight.w700,
-                color: AppColors.ink900,
+          SizedBox(
+            height: isMobile ? 68 : 64,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: isMobile ? AppSpacing.s5 : AppSpacing.s12,
+              ),
+              child: Row(
+                children: [
+                  const CircleAvatar(
+                    radius: 14,
+                    backgroundImage: AssetImage(
+                      'assets/images/profile/avatar.png',
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      isMobile
+                          ? (mobileTitle ?? activeSection.label)
+                          : profileName,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.ink900,
+                      ),
+                    ),
+                  ),
+                  if (!isMobile)
+                    for (final section in ResumeSection.values)
+                      _NavItem(
+                        section: section,
+                        active: section == activeSection,
+                      ),
+                ],
               ),
             ),
           ),
-          if (!isMobile)
-            for (final section in ResumeSection.values)
-              _NavItem(section: section, active: section == activeSection),
+          if (isMobile) _MobileSectionNav(activeSection: activeSection),
         ],
+      ),
+    );
+  }
+}
+
+class _MobileSectionNav extends StatelessWidget {
+  const _MobileSectionNav({required this.activeSection});
+
+  final ResumeSection activeSection;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.s5,
+        AppSpacing.s2,
+        AppSpacing.s5,
+        AppSpacing.s4,
+      ),
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          for (final section in ResumeSection.values)
+            _MobileNavItem(section: section, active: section == activeSection),
+        ],
+      ),
+    );
+  }
+}
+
+class _MobileNavItem extends StatelessWidget {
+  const _MobileNavItem({required this.section, required this.active});
+
+  final ResumeSection section;
+  final bool active;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.center,
+      child: InkWell(
+        key: Key('mobile-nav-${section.name}'),
+        borderRadius: BorderRadius.circular(999),
+        onTap: () => context.go(section.path),
+        child: Container(
+          height: 34,
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: active ? AppColors.primary : AppColors.surface,
+            border: Border.all(
+              color: active ? AppColors.primary : AppColors.line,
+            ),
+            borderRadius: BorderRadius.circular(999),
+          ),
+          child: Text(
+            section.label,
+            style: TextStyle(
+              color: active ? AppColors.onPrimary : AppColors.ink700,
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
       ),
     );
   }

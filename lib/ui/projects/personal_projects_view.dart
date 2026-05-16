@@ -30,7 +30,7 @@ class PersonalProjectsView extends StatelessWidget {
           LayoutBuilder(
             builder: (context, constraints) {
               final columns = constraints.maxWidth < 760 ? 1 : 2;
-              final cardHeight = columns == 1 ? 500.0 : 460.0;
+              final cardHeight = columns == 1 ? 660.0 : 460.0;
               return GridView.count(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),

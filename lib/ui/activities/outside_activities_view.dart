@@ -65,41 +65,52 @@ class _ActivityGroupView extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraints) {
           final isMobile = constraints.maxWidth < 720;
+          final header = SizedBox(
+            width: isMobile ? double.infinity : 220,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Eyebrow(group.label),
+                const SizedBox(height: AppSpacing.s2),
+                Text(
+                  group.title,
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                const SizedBox(height: AppSpacing.s3),
+                Text(
+                  group.count,
+                  style: const TextStyle(color: AppColors.ink500),
+                ),
+              ],
+            ),
+          );
+          final rows = SizedBox(
+            width: double.infinity,
+            child: Column(
+              children: [
+                for (final item in group.items) _ActivityRow(item: item),
+              ],
+            ),
+          );
+
+          if (isMobile) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                header,
+                const SizedBox(height: AppSpacing.s4),
+                rows,
+              ],
+            );
+          }
+
           return Flex(
-            direction: isMobile ? Axis.vertical : Axis.horizontal,
+            direction: Axis.horizontal,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                width: isMobile ? double.infinity : 220,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Eyebrow(group.label),
-                    const SizedBox(height: AppSpacing.s2),
-                    Text(
-                      group.title,
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    ),
-                    const SizedBox(height: AppSpacing.s3),
-                    Text(
-                      group.count,
-                      style: const TextStyle(color: AppColors.ink500),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(width: isMobile ? 0 : AppSpacing.s10, height: 0),
-              Flexible(
-                fit: isMobile ? FlexFit.loose : FlexFit.tight,
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Column(
-                    children: [
-                      for (final item in group.items) _ActivityRow(item: item),
-                    ],
-                  ),
-                ),
-              ),
+              header,
+              const SizedBox(width: AppSpacing.s10),
+              Flexible(child: rows),
             ],
           );
         },
