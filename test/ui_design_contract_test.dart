@@ -396,6 +396,56 @@ void main() {
         lessThanOrEqualTo(1),
       );
     });
+
+    testWidgets('all desktop activity link columns avoid detail overlap', (
+      tester,
+    ) async {
+      await _pumpDesktopApp(tester);
+
+      await tester.tap(find.text('その他活動').first);
+      await tester.pumpAndSettle();
+
+      final activityContracts = const [
+        (
+          'outside-activity-row-2024.08 – 2024.09-DroidKaigi2024 コントリビュート',
+          'outside-activity-link-column-2024.08 – 2024.09-DroidKaigi2024 コントリビュート',
+          '31日間コントリビュート · Zenn記事 · Welcome Talk · 貢献順位',
+        ),
+        (
+          'outside-activity-row-2023.08 – 2023.09-DroidKaigi2023 コントリビュート',
+          'outside-activity-link-column-2023.08 – 2023.09-DroidKaigi2023 コントリビュート',
+          '30日間コントリビュート · Zenn記事 · Welcome Talk · 貢献順位',
+        ),
+        (
+          'outside-activity-row-2022.09 – 2022.10-DroidKaigi2022 コントリビュート',
+          'outside-activity-link-column-2022.09 – 2022.10-DroidKaigi2022 コントリビュート',
+          '26日間でPRを38個作成 · Issue 16個消化 · Welcome Talk',
+        ),
+      ];
+
+      for (final contract in activityContracts) {
+        final row = find.byKey(Key(contract.$1), skipOffstage: false);
+        await tester.ensureVisible(row);
+        await tester.pumpAndSettle();
+
+        final visibleRow = find.byKey(Key(contract.$1));
+        final linkColumn = find.byKey(Key(contract.$2));
+        final detail = find.text(contract.$3);
+
+        expect(visibleRow, findsOneWidget);
+        expect(linkColumn, findsOneWidget);
+        expect(detail, findsOneWidget);
+
+        final rowRect = tester.getRect(visibleRow);
+        final linkColumnRect = tester.getRect(linkColumn);
+        final detailRect = tester.getRect(detail);
+        expect(detailRect.right, lessThanOrEqualTo(linkColumnRect.left - 16));
+        expect(
+          (rowRect.right - linkColumnRect.right).abs(),
+          lessThanOrEqualTo(1),
+        );
+      }
+    });
   });
 
   group('Personal projects responsive contract', () {
@@ -445,6 +495,7 @@ void main() {
         final footerRect = tester.getRect(footer);
         expect(cardRect.height, lessThan(520));
         expect(footerRect.bottom, lessThanOrEqualTo(cardRect.bottom));
+        expect(footerRect.top, greaterThan(cardRect.top));
       }
     });
   });
