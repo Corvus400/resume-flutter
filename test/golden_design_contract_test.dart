@@ -146,4 +146,12 @@ void main() {
 
     await _expectScaffoldGolden(tester, 'goldens/desktop_projects.png');
   }, tags: ['golden']);
+
+  testWidgets('desktop activities visual contract', (tester) async {
+    await _pumpDesktopApp(tester);
+    await tester.tap(find.text('その他活動').first);
+    await tester.pumpAndSettle();
+
+    await _expectScaffoldGolden(tester, 'goldens/desktop_activities.png');
+  }, tags: ['golden']);
 }

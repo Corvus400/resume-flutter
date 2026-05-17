@@ -130,87 +130,80 @@ class _ActivityRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.sizeOf(context).width < 600;
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: AppSpacing.s4),
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.lineSoft)),
-      ),
-      child: isMobile
-          ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.period,
-                  style: const TextStyle(color: AppColors.ink300),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isMobile = MediaQuery.sizeOf(context).width < 600;
+        final usesStackedLinks = isMobile || constraints.maxWidth < 620;
+        final period = Text(
+          item.period,
+          style: const TextStyle(color: AppColors.ink300),
+        );
+        final body = _ActivityBody(
+          item: item,
+          showLinksBelow: usesStackedLinks,
+        );
+
+        return Container(
+          key: Key('outside-activity-row-${item.period}-${item.title}'),
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.s4),
+          decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide(color: AppColors.lineSoft)),
+          ),
+          child: usesStackedLinks
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    period,
+                    const SizedBox(height: AppSpacing.s2),
+                    body,
+                  ],
+                )
+              : Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(width: 150, child: period),
+                    const SizedBox(width: AppSpacing.s6),
+                    Expanded(child: body),
+                    if (item.links.isNotEmpty) ...[
+                      const SizedBox(width: AppSpacing.s4),
+                      SizedBox(
+                        key: Key(
+                          'outside-activity-link-column-${item.period}-${item.title}',
+                        ),
+                        width: 280,
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: _ActivityLinks(links: item.links),
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
-                const SizedBox(height: AppSpacing.s2),
-                _ActivityBody(item: item),
-              ],
-            )
-          : Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 150,
-                  child: Text(
-                    item.period,
-                    style: const TextStyle(color: AppColors.ink300),
-                  ),
-                ),
-                const SizedBox(width: AppSpacing.s6),
-                Expanded(child: _ActivityBody(item: item)),
-              ],
-            ),
+        );
+      },
     );
   }
 }
 
 class _ActivityBody extends StatelessWidget {
-  const _ActivityBody({required this.item});
+  const _ActivityBody({required this.item, required this.showLinksBelow});
 
   final OutsideActivity item;
+  final bool showLinksBelow;
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.sizeOf(context).width < 600;
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final canPlaceLinksInline =
-            item.links.isNotEmpty && !isMobile && constraints.maxWidth >= 560;
-        final links = _ActivityLinks(links: item.links);
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (canPlaceLinksInline)
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Text(
-                      item.title,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ),
-                  const SizedBox(width: AppSpacing.s4),
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 280),
-                    child: Align(alignment: Alignment.topRight, child: links),
-                  ),
-                ],
-              )
-            else
-              Text(item.title, style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: AppSpacing.s2),
-            Text(item.detail, style: Theme.of(context).textTheme.bodyMedium),
-            if (item.links.isNotEmpty && !canPlaceLinksInline) ...[
-              const SizedBox(height: AppSpacing.s2),
-              links,
-            ],
-          ],
-        );
-      },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(item.title, style: Theme.of(context).textTheme.titleMedium),
+        const SizedBox(height: AppSpacing.s2),
+        Text(item.detail, style: Theme.of(context).textTheme.bodyMedium),
+        if (item.links.isNotEmpty && showLinksBelow) ...[
+          const SizedBox(height: AppSpacing.s2),
+          _ActivityLinks(links: item.links),
+        ],
+      ],
     );
   }
 }

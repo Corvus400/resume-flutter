@@ -346,6 +346,56 @@ void main() {
           .dy;
       expect(footerTop, lessThan(1800));
     });
+
+    testWidgets('desktop activity links stay in a right-edge column', (
+      tester,
+    ) async {
+      await _pumpDesktopApp(tester);
+
+      await tester.tap(find.text('その他活動').first);
+      await tester.pumpAndSettle();
+
+      final row = find.byKey(
+        const Key(
+          'outside-activity-row-2024.08 – 2024.09-DroidKaigi2024 コントリビュート',
+        ),
+      );
+      final linkColumn = find.byKey(
+        const Key(
+          'outside-activity-link-column-2024.08 – 2024.09-DroidKaigi2024 コントリビュート',
+        ),
+      );
+      final detail = find.text('31日間コントリビュート · Zenn記事 · Welcome Talk · 貢献順位');
+      final zennLink = find.byKey(
+        const Key(
+          'outside-activity-link-https://zenn.dev/todayama_r/articles/55ddcb366cbc50',
+        ),
+      );
+      final zennLinkInColumn = find.descendant(
+        of: linkColumn,
+        matching: zennLink,
+      );
+
+      expect(row, findsOneWidget);
+      expect(linkColumn, findsOneWidget);
+      expect(detail, findsOneWidget);
+      expect(zennLinkInColumn, findsOneWidget);
+
+      final rowRect = tester.getRect(row);
+      final detailRect = tester.getRect(detail);
+      final linkColumnRect = tester.getRect(linkColumn);
+      final zennLinkRect = tester.getRect(zennLinkInColumn);
+
+      expect(detailRect.right, lessThanOrEqualTo(linkColumnRect.left - 16));
+      expect(
+        (rowRect.right - linkColumnRect.right).abs(),
+        lessThanOrEqualTo(1),
+      );
+      expect(
+        (linkColumnRect.right - zennLinkRect.right).abs(),
+        lessThanOrEqualTo(1),
+      );
+    });
   });
 
   group('Personal projects responsive contract', () {
