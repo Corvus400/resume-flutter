@@ -81,7 +81,9 @@ jobs:
         run: dart run tool/generate_resume_content.dart --check
 
       - name: Verify repository guardrails
-        run: dart run tool/verify_resume_flutter_guardrails.dart
+        run: |
+          python3 .codex/hooks/test_resume_flutter_guard.py
+          dart run tool/verify_resume_flutter_guardrails.dart
 
       - name: Analyze
         run: flutter analyze

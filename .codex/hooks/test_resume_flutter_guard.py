@@ -49,6 +49,18 @@ class ResumeFlutterGuardTest(unittest.TestCase):
         self.assertIn("non-golden contract test", str(output["systemMessage"]))
         self.assertIn("unrelated baseline changes", str(output["systemMessage"]))
 
+    def test_prompt_warns_for_setup_without_secret_values(self) -> None:
+        output = run_hook(
+            "user-prompt-submit",
+            {"user_prompt": "Context7 と setup.sh とスキル availability を確認してください。"},
+        )
+
+        self.assertIn("systemMessage", output)
+        message = str(output["systemMessage"])
+        self.assertIn("skill existence", message)
+        self.assertIn("setup.sh --check", message)
+        self.assertIn("presence or absence", message)
+
     def test_denies_direct_main_commit(self) -> None:
         output = run_hook(
             "pre-tool-use-bash",
@@ -60,10 +72,52 @@ class ResumeFlutterGuardTest(unittest.TestCase):
         self.assertEqual(hook_output["permissionDecision"], "deny")
         self.assertIn("protected main workflow", hook_output["permissionDecisionReason"])
 
+    def test_denies_direct_main_plain_push(self) -> None:
+        output = run_hook(
+            "pre-tool-use-bash",
+            {"tool_input": {"command": "git " + "push"}},
+            branch="main",
+        )
+
+        hook_output = output["hookSpecificOutput"]
+        self.assertEqual(hook_output["permissionDecision"], "deny")
+        self.assertIn("protected main workflow", hook_output["permissionDecisionReason"])
+
+    def test_denies_direct_main_head_refspec_push(self) -> None:
+        output = run_hook(
+            "pre-tool-use-bash",
+            {"tool_input": {"command": "git " + "push origin HEAD:main"}},
+            branch="main",
+        )
+
+        hook_output = output["hookSpecificOutput"]
+        self.assertEqual(hook_output["permissionDecision"], "deny")
+        self.assertIn("protected main workflow", hook_output["permissionDecisionReason"])
+
+    def test_denies_direct_main_force_push(self) -> None:
+        output = run_hook(
+            "pre-tool-use-bash",
+            {"tool_input": {"command": "git " + "push --force-with-lease"}},
+            branch="main",
+        )
+
+        hook_output = output["hookSpecificOutput"]
+        self.assertEqual(hook_output["permissionDecision"], "deny")
+        self.assertIn("protected main workflow", hook_output["permissionDecisionReason"])
+
     def test_allows_feature_branch_commit(self) -> None:
         output = run_hook(
             "pre-tool-use-bash",
             {"tool_input": {"command": "git commit -m 'test'"}},
+            branch="codex/session-guardrails",
+        )
+
+        self.assertEqual(output, {})
+
+    def test_allows_feature_branch_push(self) -> None:
+        output = run_hook(
+            "pre-tool-use-bash",
+            {"tool_input": {"command": "git " + "push"}},
             branch="codex/session-guardrails",
         )
 

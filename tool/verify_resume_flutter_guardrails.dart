@@ -6,6 +6,8 @@ void main() {
 
   _verifyNoTrackedGeneratedState(trackedFiles, failures);
   _verifyWorkflow(failures);
+  _verifyRepoLocalHooks(failures);
+  _verifySessionInventory(failures);
   _verifyPublicTextFiles(trackedFiles, failures);
 
   if (failures.isNotEmpty) {
@@ -62,6 +64,7 @@ void _verifyWorkflow(List<String> failures) {
   }
   final text = ci.readAsStringSync();
   final requiredFragments = <String>[
+    'python3 .codex/hooks/test_resume_flutter_guard.py',
     'dart run tool/verify_resume_flutter_guardrails.dart',
     'dart run tool/generate_resume_content.dart --check',
     'flutter analyze',
@@ -73,6 +76,53 @@ void _verifyWorkflow(List<String> failures) {
   for (final fragment in requiredFragments) {
     if (!text.contains(fragment)) {
       failures.add('CI workflow is missing required fragment: $fragment');
+    }
+  }
+}
+
+void _verifyRepoLocalHooks(List<String> failures) {
+  final hooks = File('.codex/hooks.json');
+  if (!hooks.existsSync()) {
+    failures.add('missing .codex/hooks.json');
+    return;
+  }
+  final text = hooks.readAsStringSync();
+  final requiredFragments = <String>[
+    '.codex/hooks/resume_flutter_guard.py',
+    'user-prompt-submit',
+    'pre-tool-use-bash',
+  ];
+
+  for (final fragment in requiredFragments) {
+    if (!text.contains(fragment)) {
+      failures.add('repo-local hooks are missing required fragment: $fragment');
+    }
+  }
+}
+
+void _verifySessionInventory(List<String> failures) {
+  final docs = File('docs/session-retrospective-guardrails.md');
+  if (!docs.existsSync()) {
+    failures.add('missing docs/session-retrospective-guardrails.md');
+    return;
+  }
+  final text = docs.readAsStringSync();
+  final requiredFragments = <String>[
+    '## Session Inventory',
+    'Flutter Web planning',
+    'Skill and setup checks',
+    'Publication hardening',
+    'Protected workflow',
+    'UI and golden regressions',
+    'Repository boundary',
+    'user-level Codex dotfiles',
+  ];
+
+  for (final fragment in requiredFragments) {
+    if (!text.contains(fragment)) {
+      failures.add(
+        'session guardrail docs are missing required fragment: $fragment',
+      );
     }
   }
 }

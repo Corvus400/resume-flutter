@@ -36,3 +36,30 @@ state must stay outside the repository.
   they are available.
 - Never print secret values. It is enough to report whether a required secret is
   present.
+
+## Session Inventory
+
+These durable rules were distilled from session summaries and repository state,
+not from raw session logs. Keep the original logs, local paths, screenshots, and
+private runtime state out of git.
+
+- Flutter Web planning: keep this as a separate Flutter Web portfolio, use the
+  existing GitHub Pages/WASM direction, and remove unresolved Open Questions
+  from handoff plans before implementation.
+- Skill and setup checks: verify required Codex-visible skills and
+  `setup.sh --check` from actual files or command output. Context7 credentials
+  must be reported as present or absent only.
+- Publication hardening: before public or security-sensitive changes, inspect
+  local files, git history, GitHub settings, Actions, Pages, and leak scans from
+  primary evidence.
+- Protected workflow: after the default-branch ruleset was enabled, repository
+  code changes must use a feature branch, Japanese PR title/summary, and
+  `ci-gate` verification.
+- Deployment maintenance: deploy from the latest `main`, not a stale checkout or
+  feature branch, and clean merged branches only after confirming merge state.
+- Resume content: edit `content/resume/*.yaml`, regenerate Dart output, and keep
+  generated files out of manual-edit workflows.
+- UI and golden regressions: reproduce recurring layout issues with
+  non-golden contract tests first, then use goldens as scoped visual evidence.
+- Repository boundary: keep `resume-flutter`-specific guardrails in this repo.
+  Promote only cross-repository guidance to user-level Codex dotfiles.

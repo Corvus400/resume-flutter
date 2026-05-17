@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import os
+import shlex
 import subprocess
 import sys
 from typing import Any
@@ -93,6 +94,40 @@ def _contains_any(text: str, needles: tuple[str, ...]) -> bool:
     return any(needle.lower() in lower for needle in needles)
 
 
+def _shell_words(command: str) -> list[str]:
+    try:
+        return shlex.split(command)
+    except ValueError:
+        return command.split()
+
+
+def _is_git_direct_main_write(command: str) -> bool:
+    words = _shell_words(command)
+    if len(words) < 2 or words[0] != "git":
+        return False
+
+    subcommand = words[1]
+    if subcommand == "commit":
+        return True
+    if subcommand != "push":
+        return False
+
+    if "--dry-run" in words or "-n" in words:
+        return False
+    if "--force" in words or "--force-with-lease" in words or "-f" in words:
+        return True
+    if len(words) == 2:
+        return True
+    if words[2] == "origin":
+        return len(words) == 3 or any(_pushes_main(refspec) for refspec in words[3:])
+    return any(_pushes_main(refspec) for refspec in words[2:])
+
+
+def _pushes_main(refspec: str) -> bool:
+    cleaned = refspec.lstrip("+")
+    return cleaned in {"main", "HEAD:main", "refs/heads/main"} or cleaned.endswith(":main")
+
+
 def _handle_user_prompt(payload: dict[str, Any]) -> None:
     text = _payload_text(payload)
     messages: list[str] = []
@@ -109,7 +144,7 @@ def _handle_user_prompt(payload: dict[str, Any]) -> None:
 
     if _contains_any(text, ("context7", "setup.sh", "skill availability", "スキル", "secret", "api_key")):
         messages.append(
-            "resume-flutter setup guardrail: verify required skills/setup from evidence and never print secret values; report only presence or absence."
+            "resume-flutter setup guardrail: verify required skill existence and setup.sh --check from evidence; never print secret values, and report only presence or absence."
         )
 
     if messages:
@@ -122,13 +157,7 @@ def _handle_bash(payload: dict[str, Any]) -> None:
     if branch != "main":
         return
 
-    direct_main_write = (
-        "git commit" in command
-        or "git push origin main" in command
-        or "git push --set-upstream origin main" in command
-        or "git push -u origin main" in command
-    )
-    if direct_main_write:
+    if _is_git_direct_main_write(command):
         _deny_pre_tool_use(
             "resume-flutter has a protected main workflow. Create a feature branch from latest origin/main and use a Japanese PR instead of committing or pushing directly to main."
         )
