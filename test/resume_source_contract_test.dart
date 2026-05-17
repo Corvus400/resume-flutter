@@ -124,6 +124,8 @@ void main() {
           specification.repoUrl,
           'https://github.com/Corvus400/specification',
         );
+        expect(specification.summary, contains('複数リポジトリ'));
+        expect(specification.summary, contains('横断'));
         expect(specification.tags, ['OpenAPI', 'Shell', 'Markdown']);
         expect(
           specification.imageAssetPath,
@@ -137,6 +139,8 @@ void main() {
           designBlueprint.repoUrl,
           'https://github.com/Corvus400/design-blueprint',
         );
+        expect(designBlueprint.summary, contains('複数リポジトリ'));
+        expect(designBlueprint.summary, contains('UI実装'));
         expect(designBlueprint.tags, ['HTML', 'Playwright', 'VRT']);
         expect(
           designBlueprint.imageAssetPath,

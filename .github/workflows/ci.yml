@@ -80,6 +80,9 @@ jobs:
       - name: Verify generated resume content
         run: dart run tool/generate_resume_content.dart --check
 
+      - name: Verify repository guardrails
+        run: dart run tool/verify_resume_flutter_guardrails.dart
+
       - name: Analyze
         run: flutter analyze
 
