@@ -67,8 +67,10 @@ flutter:
   assets:
     - assets/images/Insights.png
     - assets/images/profile/avatar.png
+    - assets/images/readme/design_blueprint_header.png
     - assets/images/readme/fddr_flutter_header.png
     - assets/images/readme/fddr_mock_server_header.png
+    - assets/images/readme/specification_header.png
     - assets/readme/header.png
 
   fonts:

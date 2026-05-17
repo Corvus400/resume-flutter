@@ -116,6 +116,32 @@ void main() {
         expect(resumeFlutter.tags, isNot(contains('Design Spec')));
         expect(resumeFlutter.status, '公開中');
         expect(resumeFlutter.imageAssetPath, 'assets/readme/header.png');
+
+        final specification = personalProjects.singleWhere(
+          (project) => project.name == 'specification',
+        );
+        expect(
+          specification.repoUrl,
+          'https://github.com/Corvus400/specification',
+        );
+        expect(specification.tags, ['OpenAPI', 'Shell', 'Markdown']);
+        expect(
+          specification.imageAssetPath,
+          'assets/images/readme/specification_header.png',
+        );
+
+        final designBlueprint = personalProjects.singleWhere(
+          (project) => project.name == 'design-blueprint',
+        );
+        expect(
+          designBlueprint.repoUrl,
+          'https://github.com/Corvus400/design-blueprint',
+        );
+        expect(designBlueprint.tags, ['HTML', 'Playwright', 'VRT']);
+        expect(
+          designBlueprint.imageAssetPath,
+          'assets/images/readme/design_blueprint_header.png',
+        );
       },
     );
   });

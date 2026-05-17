@@ -711,6 +711,24 @@ const personalProjects = <PersonalProject>[
     tags: <String>['Flutter', 'Dart', 'go_router'],
     imageAssetPath: 'assets/readme/header.png',
   ),
+  PersonalProject(
+    name: 'specification',
+    kind: 'Specification',
+    summary: '複数リポジトリを横断して参照する仕様書・API契約・設計メモを管理するリポジトリ。',
+    repoUrl: 'https://github.com/Corvus400/specification',
+    status: '公開中',
+    tags: <String>['OpenAPI', 'Shell', 'Markdown'],
+    imageAssetPath: 'assets/images/readme/specification_header.png',
+  ),
+  PersonalProject(
+    name: 'design-blueprint',
+    kind: 'HTML Design Spec',
+    summary: '複数リポジトリのUI実装に向けたHTMLデザイン仕様、監査ルール、VRT baselineを管理するリポジトリ。',
+    repoUrl: 'https://github.com/Corvus400/design-blueprint',
+    status: '公開中',
+    tags: <String>['HTML', 'Playwright', 'VRT'],
+    imageAssetPath: 'assets/images/readme/design_blueprint_header.png',
+  ),
 ];
 
 const outsideActivityGroups = <OutsideActivityGroup>[
