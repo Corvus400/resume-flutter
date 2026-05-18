@@ -53,20 +53,61 @@ class PersonalProjectsView extends StatelessWidget {
               final spacing = AppSpacing.s6;
               final cardWidth =
                   (constraints.maxWidth - spacing * (columns - 1)) / columns;
-              return Wrap(
+              return Column(
                 key: const Key('project-grid'),
-                spacing: spacing,
-                runSpacing: spacing,
                 children: [
-                  for (final indexed in viewModel.projects.indexed)
-                    SizedBox(
-                      width: cardWidth,
-                      child: _ProjectCard(
-                        key: Key('project-card-${indexed.$1}'),
-                        project: indexed.$2,
-                        index: indexed.$1,
+                  if (columns == 1)
+                    for (final indexed in viewModel.projects.indexed) ...[
+                      SizedBox(
+                        width: cardWidth,
+                        child: _ProjectCard(
+                          key: Key('project-card-${indexed.$1}'),
+                          project: indexed.$2,
+                          index: indexed.$1,
+                        ),
                       ),
-                    ),
+                      if (indexed.$1 != viewModel.projects.length - 1)
+                        SizedBox(height: spacing),
+                    ]
+                  else
+                    for (
+                      var rowStart = 0;
+                      rowStart < viewModel.projects.length;
+                      rowStart += columns
+                    ) ...[
+                      IntrinsicHeight(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            for (
+                              var column = 0;
+                              column < columns;
+                              column++
+                            ) ...[
+                              if (column > 0) SizedBox(width: spacing),
+                              SizedBox(
+                                width: cardWidth,
+                                child:
+                                    rowStart + column <
+                                        viewModel.projects.length
+                                    ? _ProjectCard(
+                                        key: Key(
+                                          'project-card-${rowStart + column}',
+                                        ),
+                                        project: viewModel
+                                            .projects[rowStart + column],
+                                        index: rowStart + column,
+                                        stretchContent: true,
+                                      )
+                                    : const SizedBox.shrink(),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                      if (rowStart + columns < viewModel.projects.length)
+                        SizedBox(height: spacing),
+                    ],
                 ],
               );
             },
@@ -83,11 +124,13 @@ class _ProjectCard extends StatefulWidget {
     required this.project,
     required this.index,
     this.compact = false,
+    this.stretchContent = false,
   });
 
   final PersonalProject project;
   final int index;
   final bool compact;
+  final bool stretchContent;
 
   @override
   State<_ProjectCard> createState() => _ProjectCardState();
@@ -100,6 +143,40 @@ class _ProjectCardState extends State<_ProjectCard> {
   Widget build(BuildContext context) {
     final project = widget.project;
     final compact = widget.compact;
+    final body = Padding(
+      padding: EdgeInsets.all(compact ? AppSpacing.s4 : AppSpacing.s6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  project.name,
+                  style: compact
+                      ? Theme.of(context).textTheme.titleMedium
+                      : Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+              TagChip(project.status, highlight: project.status == '公開中'),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.s1),
+          Eyebrow(project.kind),
+          const SizedBox(height: AppSpacing.s4),
+          Text(project.summary, style: Theme.of(context).textTheme.bodyMedium),
+          const SizedBox(height: AppSpacing.s5),
+          Wrap(
+            spacing: AppSpacing.s2,
+            runSpacing: AppSpacing.s2,
+            children: [for (final tag in project.tags) TagChip(tag)],
+          ),
+        ],
+      ),
+    );
+
     return InkWell(
       onTap: () => launchExternalUrl(context, project.repoUrl),
       onHover: (hovered) => setState(() => _hovered = hovered),
@@ -139,47 +216,7 @@ class _ProjectCardState extends State<_ProjectCard> {
                       )
                     : Image.asset(project.imageAssetPath!, fit: BoxFit.cover),
               ),
-              Padding(
-                padding: EdgeInsets.all(
-                  compact ? AppSpacing.s4 : AppSpacing.s6,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            project.name,
-                            style: compact
-                                ? Theme.of(context).textTheme.titleMedium
-                                : Theme.of(context).textTheme.titleLarge,
-                          ),
-                        ),
-                        TagChip(
-                          project.status,
-                          highlight: project.status == '公開中',
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: AppSpacing.s1),
-                    Eyebrow(project.kind),
-                    const SizedBox(height: AppSpacing.s4),
-                    Text(
-                      project.summary,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    const SizedBox(height: AppSpacing.s5),
-                    Wrap(
-                      spacing: AppSpacing.s2,
-                      runSpacing: AppSpacing.s2,
-                      children: [for (final tag in project.tags) TagChip(tag)],
-                    ),
-                  ],
-                ),
-              ),
+              if (widget.stretchContent) Expanded(child: body) else body,
               Container(
                 key: Key('project-card-footer-${widget.index}'),
                 padding: const EdgeInsets.symmetric(

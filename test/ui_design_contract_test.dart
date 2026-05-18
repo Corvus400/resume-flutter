@@ -493,9 +493,41 @@ void main() {
 
         final cardRect = tester.getRect(firstCard);
         final footerRect = tester.getRect(footer);
-        expect(cardRect.height, lessThan(520));
+        expect(cardRect.height, lessThan(size.width >= 1280 ? 580 : 520));
         expect(footerRect.bottom, lessThanOrEqualTo(cardRect.bottom));
         expect(footerRect.top, greaterThan(cardRect.top));
+      }
+    });
+
+    testWidgets('desktop project cards match heights within each row', (
+      tester,
+    ) async {
+      await _pumpDesktopApp(tester);
+      await tester.tap(find.text('個人開発').first);
+      await tester.pumpAndSettle();
+
+      for (final pair in const [(0, 1), (2, 3), (4, 5)]) {
+        final leftCard = find.byKey(Key('project-card-${pair.$1}'));
+        final rightCard = find.byKey(Key('project-card-${pair.$2}'));
+        final leftFooter = find.byKey(Key('project-card-footer-${pair.$1}'));
+        final rightFooter = find.byKey(Key('project-card-footer-${pair.$2}'));
+
+        expect(leftCard, findsOneWidget);
+        expect(rightCard, findsOneWidget);
+
+        final leftRect = tester.getRect(leftCard);
+        final rightRect = tester.getRect(rightCard);
+        expect(leftRect.top, closeTo(rightRect.top, 0.1));
+        expect(leftRect.height, closeTo(rightRect.height, 0.1));
+
+        expect(
+          tester.getRect(leftFooter).bottom,
+          closeTo(leftRect.bottom, 1.1),
+        );
+        expect(
+          tester.getRect(rightFooter).bottom,
+          closeTo(rightRect.bottom, 1.1),
+        );
       }
     });
   });
