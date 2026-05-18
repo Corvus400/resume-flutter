@@ -146,6 +146,22 @@ void main() {
           designBlueprint.imageAssetPath,
           'assets/images/readme/design_blueprint_header.png',
         );
+
+        final videoCaptureMcp = personalProjects.singleWhere(
+          (project) => project.name == 'video-capture-mcp',
+        );
+        expect(
+          videoCaptureMcp.repoUrl,
+          'https://github.com/Corvus400/video-capture-mcp',
+        );
+        expect(videoCaptureMcp.summary, contains('AIエージェント'));
+        expect(videoCaptureMcp.summary, contains('自律的に撮影'));
+        expect(videoCaptureMcp.summary, contains('デバッグや検証'));
+        expect(videoCaptureMcp.tags, ['Python', 'FastMCP', 'ffmpeg']);
+        expect(
+          videoCaptureMcp.imageAssetPath,
+          'assets/images/readme/video_capture_mcp_header.png',
+        );
       },
     );
   });
