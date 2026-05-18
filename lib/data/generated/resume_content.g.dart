@@ -729,6 +729,16 @@ const personalProjects = <PersonalProject>[
     tags: <String>['HTML', 'Playwright', 'VRT'],
     imageAssetPath: 'assets/images/readme/design_blueprint_header.png',
   ),
+  PersonalProject(
+    name: 'video-capture-mcp',
+    kind: 'MCP Server',
+    summary:
+        'AIエージェントがmacOS / iOS Simulator / Androidの操作動画を自律的に撮影し、フレーム抽出をデバッグや検証に活用できるMCPサーバー。',
+    repoUrl: 'https://github.com/Corvus400/video-capture-mcp',
+    status: '公開中',
+    tags: <String>['Python', 'FastMCP', 'ffmpeg'],
+    imageAssetPath: 'assets/images/readme/video_capture_mcp_header.png',
+  ),
 ];
 
 const outsideActivityGroups = <OutsideActivityGroup>[
