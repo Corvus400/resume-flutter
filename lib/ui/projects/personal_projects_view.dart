@@ -177,8 +177,11 @@ class _ProjectCardState extends State<_ProjectCard> {
       ),
     );
 
+    final hasRepoLink = project.repoLinkEnabled;
     return InkWell(
-      onTap: () => launchExternalUrl(context, project.repoUrl),
+      onTap: hasRepoLink
+          ? () => launchExternalUrl(context, project.repoUrl)
+          : null,
       onHover: (hovered) => setState(() => _hovered = hovered),
       borderRadius: BorderRadius.circular(12),
       child: AnimatedContainer(
@@ -186,10 +189,10 @@ class _ProjectCardState extends State<_ProjectCard> {
         decoration: BoxDecoration(
           color: AppColors.surface,
           border: Border.all(
-            color: _hovered ? AppColors.primary : AppColors.line,
+            color: _hovered && hasRepoLink ? AppColors.primary : AppColors.line,
           ),
           borderRadius: BorderRadius.circular(12),
-          boxShadow: _hovered
+          boxShadow: _hovered && hasRepoLink
               ? [
                   BoxShadow(
                     color: AppColors.primary.withValues(alpha: 0.08),
@@ -210,9 +213,7 @@ class _ProjectCardState extends State<_ProjectCard> {
                 child: project.imageAssetPath == null
                     ? const ColoredBox(
                         color: AppColors.surfaceAlt,
-                        child: Center(
-                          child: Eyebrow('App Screenshot — resume-flutter'),
-                        ),
+                        child: Center(child: Eyebrow('No project image yet')),
                       )
                     : Image.asset(project.imageAssetPath!, fit: BoxFit.cover),
               ),
@@ -234,9 +235,11 @@ class _ProjectCardState extends State<_ProjectCard> {
                       style: const TextStyle(color: AppColors.ink500),
                     ),
                     Text(
-                      'GitHub ↗',
+                      hasRepoLink ? 'GitHub ↗' : '準備中',
                       style: TextStyle(
-                        color: _hovered ? AppColors.primary : AppColors.ink900,
+                        color: _hovered && hasRepoLink
+                            ? AppColors.primary
+                            : AppColors.ink900,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

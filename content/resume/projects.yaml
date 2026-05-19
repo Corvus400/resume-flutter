@@ -22,6 +22,17 @@ items:
       - "ktor-openapi-tools"
     imageAssetPath: "assets/images/readme/fddr_mock_server_header.png"
   -
+    name: "fictional-drug-and-disease-ref-ios(メディマスタ)"
+    kind: "iOS app"
+    summary: "架空医薬品・疾患データを扱う医療リファレンスアプリのiOS版実装。"
+    repoUrl: "https://github.com/Corvus400/fictional-drug-and-disease-ref-ios"
+    repoLinkEnabled: false
+    status: "作成中"
+    tags:
+      - "Swift"
+      - "SwiftUI"
+      - "Xcode"
+  -
     name: "resume-flutter"
     kind: "Flutter Web"
     summary: "職務経歴をFlutter Webで構造化表示するための実装リポジトリ。"
