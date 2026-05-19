@@ -6,6 +6,7 @@ class PersonalProject {
     required this.repoUrl,
     required this.status,
     required this.tags,
+    this.repoLinkEnabled = true,
     this.imageAssetPath,
   });
 
@@ -15,5 +16,6 @@ class PersonalProject {
   final String repoUrl;
   final String status;
   final List<String> tags;
+  final bool repoLinkEnabled;
   final String? imageAssetPath;
 }

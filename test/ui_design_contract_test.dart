@@ -530,5 +530,35 @@ void main() {
         );
       }
     });
+
+    testWidgets('draft project cards are visible but not tappable links', (
+      tester,
+    ) async {
+      await _pumpDesktopApp(tester);
+      await tester.tap(find.text('個人開発').first);
+      await tester.pumpAndSettle();
+
+      final draftCard = find.byKey(const Key('project-card-2'));
+      final draftFooter = find.byKey(const Key('project-card-footer-2'));
+      expect(draftCard, findsOneWidget);
+      expect(draftFooter, findsOneWidget);
+      expect(
+        find.descendant(of: draftCard, matching: find.text('作成中')),
+        findsWidgets,
+      );
+      expect(
+        find.descendant(of: draftCard, matching: find.text('準備中')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: draftCard, matching: find.text('GitHub ↗')),
+        findsNothing,
+      );
+
+      final inkWell = tester.widget<InkWell>(
+        find.ancestor(of: draftFooter, matching: find.byType(InkWell)).first,
+      );
+      expect(inkWell.onTap, isNull);
+    });
   });
 }

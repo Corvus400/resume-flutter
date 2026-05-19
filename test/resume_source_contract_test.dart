@@ -109,6 +109,21 @@ void main() {
         expect(mockServer.tags, ['Kotlin', 'Ktor 3.x', 'ktor-openapi-tools']);
         expect(mockServer.tags, isNot(contains('Scenario')));
 
+        final ios = personalProjects.singleWhere(
+          (project) =>
+              project.name == 'fictional-drug-and-disease-ref-ios(メディマスタ)',
+        );
+        expect(ios.kind, 'iOS app');
+        expect(ios.summary, contains('医療リファレンスアプリのiOS版実装'));
+        expect(
+          ios.repoUrl,
+          'https://github.com/Corvus400/fictional-drug-and-disease-ref-ios',
+        );
+        expect(ios.repoLinkEnabled, isFalse);
+        expect(ios.status, '作成中');
+        expect(ios.tags, ['Swift', 'SwiftUI', 'Xcode']);
+        expect(ios.imageAssetPath, isNull);
+
         final resumeFlutter = personalProjects.singleWhere(
           (project) => project.name == 'resume-flutter',
         );

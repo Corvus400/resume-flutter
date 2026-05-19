@@ -163,6 +163,9 @@ String _generate() {
       ..writeln('    kind: ${_s(item.string('kind'))},')
       ..writeln('    summary: ${_s(item.string('summary'))},')
       ..writeln('    repoUrl: ${_s(item.string('repoUrl'))},')
+      ..writeln(
+        '    repoLinkEnabled: ${item.boolean('repoLinkEnabled', defaultValue: true)},',
+      )
       ..writeln('    status: ${_s(item.string('status'))},')
       ..writeln(
         '    tags: <String>[${item.list('tags').strings().map(_s).join(', ')}],',
