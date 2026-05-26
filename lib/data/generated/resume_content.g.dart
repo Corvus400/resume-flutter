@@ -705,6 +705,17 @@ const personalProjects = <PersonalProject>[
     imageAssetPath: 'assets/images/readme/fddr_mock_server_header.png',
   ),
   PersonalProject(
+    name: 'fictional-drug-and-disease-ref-backend-kotlin(メディマスタ)',
+    kind: 'Ktor Backend API',
+    summary: '架空医薬品・疾患リファレンスアプリ向けの、PostgreSQL / OpenAPI backed Ktor APIバックエンド。',
+    repoUrl:
+        'https://github.com/Corvus400/fictional-drug-and-disease-ref-backend-kotlin',
+    repoLinkEnabled: true,
+    status: '公開中',
+    tags: <String>['Kotlin', 'Ktor 3.x', 'PostgreSQL'],
+    imageAssetPath: 'assets/images/readme/fddr_backend_kotlin_header.png',
+  ),
+  PersonalProject(
     name: 'fictional-drug-and-disease-ref-ios(メディマスタ)',
     kind: 'iOS app',
     summary: '架空医薬品・疾患データを扱う医療リファレンスアプリのiOS版実装。',

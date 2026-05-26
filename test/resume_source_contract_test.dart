@@ -109,6 +109,25 @@ void main() {
         expect(mockServer.tags, ['Kotlin', 'Ktor 3.x', 'ktor-openapi-tools']);
         expect(mockServer.tags, isNot(contains('Scenario')));
 
+        final backendKotlin = personalProjects.singleWhere(
+          (project) => project.name.contains('backend-kotlin'),
+        );
+        expect(backendKotlin.kind, 'Ktor Backend API');
+        expect(
+          backendKotlin.summary,
+          contains('PostgreSQL / OpenAPI backed Ktor APIバックエンド'),
+        );
+        expect(
+          backendKotlin.repoUrl,
+          'https://github.com/Corvus400/fictional-drug-and-disease-ref-backend-kotlin',
+        );
+        expect(backendKotlin.status, '公開中');
+        expect(backendKotlin.tags, ['Kotlin', 'Ktor 3.x', 'PostgreSQL']);
+        expect(
+          backendKotlin.imageAssetPath,
+          'assets/images/readme/fddr_backend_kotlin_header.png',
+        );
+
         final ios = personalProjects.singleWhere(
           (project) =>
               project.name == 'fictional-drug-and-disease-ref-ios(メディマスタ)',
