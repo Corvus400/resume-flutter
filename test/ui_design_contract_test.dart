@@ -506,7 +506,7 @@ void main() {
       await tester.tap(find.text('個人開発').first);
       await tester.pumpAndSettle();
 
-      for (final pair in const [(0, 1), (2, 3), (4, 5)]) {
+      for (final pair in const [(0, 1), (2, 3), (4, 5), (6, 7)]) {
         final leftCard = find.byKey(Key('project-card-${pair.$1}'));
         final rightCard = find.byKey(Key('project-card-${pair.$2}'));
         final leftFooter = find.byKey(Key('project-card-footer-${pair.$1}'));
@@ -538,10 +538,13 @@ void main() {
       await tester.tap(find.text('個人開発').first);
       await tester.pumpAndSettle();
 
-      final draftCard = find.byKey(const Key('project-card-2'));
-      final draftFooter = find.byKey(const Key('project-card-footer-2'));
+      final draftCard = find
+          .ancestor(
+            of: find.text('fictional-drug-and-disease-ref-ios(メディマスタ)'),
+            matching: find.byType(InkWell),
+          )
+          .first;
       expect(draftCard, findsOneWidget);
-      expect(draftFooter, findsOneWidget);
       expect(
         find.descendant(of: draftCard, matching: find.text('作成中')),
         findsWidgets,
@@ -555,9 +558,7 @@ void main() {
         findsNothing,
       );
 
-      final inkWell = tester.widget<InkWell>(
-        find.ancestor(of: draftFooter, matching: find.byType(InkWell)).first,
-      );
+      final inkWell = tester.widget<InkWell>(draftCard);
       expect(inkWell.onTap, isNull);
     });
   });
