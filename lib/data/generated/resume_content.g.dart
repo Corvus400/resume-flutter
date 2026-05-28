@@ -716,6 +716,16 @@ const personalProjects = <PersonalProject>[
     imageAssetPath: 'assets/images/readme/fddr_backend_kotlin_header.png',
   ),
   PersonalProject(
+    name: 'fictional-drug-and-disease-ref-cms(メディマスタ)',
+    kind: 'React Admin CMS',
+    summary: '架空医薬品・疾患リファレンスアプリの管理データを編集するローカル限定の管理画面(CMS)。',
+    repoUrl: 'https://github.com/Corvus400/fictional-drug-and-disease-ref-cms',
+    repoLinkEnabled: true,
+    status: '公開中',
+    tags: <String>['React', 'TypeScript', 'Tailwind CSS'],
+    imageAssetPath: 'assets/images/readme/fddr_cms_header.png',
+  ),
+  PersonalProject(
     name: 'fictional-drug-and-disease-ref-ios(メディマスタ)',
     kind: 'iOS app',
     summary: '架空医薬品・疾患データを扱う医療リファレンスアプリのiOS版実装。',

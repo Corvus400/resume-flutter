@@ -69,6 +69,7 @@ flutter:
     - assets/images/profile/avatar.png
     - assets/images/readme/design_blueprint_header.png
     - assets/images/readme/fddr_backend_kotlin_header.png
+    - assets/images/readme/fddr_cms_header.png
     - assets/images/readme/fddr_flutter_header.png
     - assets/images/readme/fddr_mock_server_header.png
     - assets/images/readme/specification_header.png

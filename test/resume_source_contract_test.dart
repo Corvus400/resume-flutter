@@ -128,6 +128,22 @@ void main() {
           'assets/images/readme/fddr_backend_kotlin_header.png',
         );
 
+        final cms = personalProjects.singleWhere(
+          (project) => project.name.contains('cms'),
+        );
+        expect(cms.kind, 'React Admin CMS');
+        expect(cms.summary, contains('ローカル限定の管理画面(CMS)'));
+        expect(
+          cms.repoUrl,
+          'https://github.com/Corvus400/fictional-drug-and-disease-ref-cms',
+        );
+        expect(cms.status, '公開中');
+        expect(cms.tags, ['React', 'TypeScript', 'Tailwind CSS']);
+        expect(
+          cms.imageAssetPath,
+          'assets/images/readme/fddr_cms_header.png',
+        );
+
         final ios = personalProjects.singleWhere(
           (project) =>
               project.name == 'fictional-drug-and-disease-ref-ios(メディマスタ)',
