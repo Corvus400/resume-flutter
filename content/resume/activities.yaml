@@ -63,6 +63,14 @@ groups:
     count: "Zenn"
     items:
       -
+        period: "2026.05"
+        title: "Claude Code と Codex の両方に、機密情報と個人情報を漏らさせない hook を作った話"
+        detail: "Claude Code / Codex 向け二層防御 hook の実装"
+        links:
+          -
+            label: "Zenn"
+            url: "https://zenn.dev/todayama_r/articles/multi-agent-secret-pii-guard-hooks"
+      -
         period: "2025.06"
         title: "Zenn: DroidKaigi contribution write-ups"
         detail: "DroidKaigi コントリビュートの振り返り"
