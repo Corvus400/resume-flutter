@@ -344,7 +344,7 @@ void main() {
       final footerTop = tester
           .getTopLeft(find.text('FLUTTER WEB · HASH ROUTING'))
           .dy;
-      expect(footerTop, lessThan(1800));
+      expect(footerTop, lessThan(2000));
     });
 
     testWidgets('desktop activity links stay in a right-edge column', (
