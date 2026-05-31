@@ -867,6 +867,18 @@ const outsideActivityGroups = <OutsideActivityGroup>[
     items: <OutsideActivity>[
       OutsideActivity(
         period: '2026.05',
+        title: 'Claude Code の sandbox で Gradle ビルドが必ず落ちる理由と回避方法',
+        detail: 'sandbox で Gradle ビルドが落ちる原因と回避方法',
+        links: <ResumeLink>[
+          ResumeLink(
+            label: 'Zenn',
+            url:
+                'https://zenn.dev/todayama_r/articles/claude-code-sandbox-gradle-build',
+          ),
+        ],
+      ),
+      OutsideActivity(
+        period: '2026.05',
         title: 'Claude Code と Codex の両方に、機密情報と個人情報を漏らさせない hook を作った話',
         detail: 'Claude Code / Codex 向け二層防御 hook の実装',
         links: <ResumeLink>[
