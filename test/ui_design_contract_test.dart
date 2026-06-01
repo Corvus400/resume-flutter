@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:resume_flutter/app.dart';
+import 'package:resume_flutter/data/resume_data.dart';
 import 'package:resume_flutter/router.dart';
 import 'package:resume_flutter/theme/app_colors.dart';
 
@@ -340,11 +341,66 @@ void main() {
       final droidKaigi2024 = find.text('DroidKaigi2024 コントリビュート');
       expect(droidKaigi2024, findsOneWidget);
       expect(tester.getSize(droidKaigi2024).width, greaterThan(180));
+    });
 
-      final footerTop = tester
-          .getTopLeft(find.text('FLUTTER WEB · HASH ROUTING'))
-          .dy;
-      expect(footerTop, lessThan(2000));
+    testWidgets('every desktop link-bearing row keeps its right-edge link column', (
+      tester,
+    ) async {
+      // Regression guard for e9b8963 (fix: prevent outside activity layout
+      // collapse). On a wide desktop viewport every activity row that has links
+      // must lay out horizontally (period | body | links), which is the only
+      // branch that builds the keyed link column
+      // ('outside-activity-link-column-<period>-<title>', see
+      // outside_activities_view.dart). When the row collapses to the stacked
+      // (mobile-style) layout that key is not emitted at all. Iterating over
+      // every group/item — instead of asserting a whole-page footer Y position —
+      // covers newly added articles automatically and needs no threshold bump
+      // when the list grows, which is what made the old footerTop guard drift
+      // upward (1800 -> 2000 -> ...) with each added entry.
+      await _pumpDesktopApp(tester);
+
+      await tester.tap(find.text('その他活動').first);
+      await tester.pumpAndSettle();
+
+      for (final group in outsideActivityGroups) {
+        for (final item in group.items) {
+          if (item.links.isEmpty) continue;
+
+          final rowKey = Key('outside-activity-row-${item.period}-${item.title}');
+          final columnKey = Key(
+            'outside-activity-link-column-${item.period}-${item.title}',
+          );
+
+          await tester.ensureVisible(find.byKey(rowKey, skipOffstage: false));
+          await tester.pumpAndSettle();
+
+          final rowFinder = find.byKey(rowKey);
+          final columnFinder = find.byKey(columnKey);
+          expect(
+            rowFinder,
+            findsOneWidget,
+            reason: 'missing row for ${item.period} ${item.title}',
+          );
+          expect(
+            columnFinder,
+            findsOneWidget,
+            reason:
+                'desktop row collapsed to a stacked layout (no right-edge link '
+                'column): ${item.period} ${item.title}',
+          );
+
+          // The link column hugs the right edge of the row.
+          final rowRect = tester.getRect(rowFinder);
+          final columnRect = tester.getRect(columnFinder);
+          expect(
+            (rowRect.right - columnRect.right).abs(),
+            lessThanOrEqualTo(1),
+            reason:
+                'link column is not flush with the row right edge: '
+                '${item.period} ${item.title}',
+          );
+        }
+      }
     });
 
     testWidgets('desktop activity links stay in a right-edge column', (
