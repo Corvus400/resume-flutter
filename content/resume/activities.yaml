@@ -63,6 +63,14 @@ groups:
     count: "Zenn"
     items:
       -
+        period: "2026.06"
+        title: "Claude Design が作った HTML に、要件を満たしているか自己検証させる"
+        detail: "Claude Design 生成 HTML に検証ロジックを埋め込み実装との乖離を防ぐ"
+        links:
+          -
+            label: "Zenn"
+            url: "https://zenn.dev/todayama_r/articles/claude-design-self-verifying-html"
+      -
         period: "2026.05"
         title: "Claude Code の sandbox で Gradle ビルドが必ず落ちる理由と回避方法"
         detail: "sandbox で Gradle ビルドが落ちる原因と回避方法"
